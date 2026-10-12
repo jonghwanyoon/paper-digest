@@ -141,6 +141,8 @@ def _report(res, label: str) -> None:
         msg += f" · 사용량 한도로 중단(남은 {res.remaining}편은 다음 실행으로)"
     elif res.stopped == "unavailable":
         msg += f" · 엔진 사용 불가로 중단(남은 {res.remaining}편)"
+    elif res.stopped == "busy":
+        msg += f" · 서버 일시 오류가 계속돼 중단(남은 {res.remaining}편은 다음 실행으로)"
     print(msg)
 
 
@@ -261,7 +263,7 @@ def cmd_run(cfg, conn, args) -> int:
         if res.stopped == "unavailable":
             code = 2
     if args.no_summarize or args.no_figures or summary_stopped:
-        # 요약이 한도·인증 문제로 멈췄으면 이미지 생성도 같은 이유로 실패하므로 GA 확인만 한다
+        # 요약이 한도·인증·서버 문제로 멈췄으면 이미지 생성도 같은 이유로 실패하므로 GA 확인만 한다
         log.info("graphical abstract: %s", figures.check_graphical_abstracts(cfg, conn, client))
     else:
         fres = _figure_step(cfg, conn, client, args, args.figure_limit)

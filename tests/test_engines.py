@@ -8,8 +8,8 @@ import unittest
 from pathlib import Path
 
 from digest.config import EngineSettings
-from digest.engines import (EngineError, EngineUnavailable, QuotaExhausted, run_claude, run_codex,
-                            run_codex_image)
+from digest.engines import (EngineBusy, EngineError, EngineUnavailable, QuotaExhausted, run_claude,
+                            run_codex, run_codex_image)
 
 SETTINGS = EngineSettings(engine="codex", model="m", effort="low", timeout_sec=30,
                           max_attempts=3, max_input_chars=1000)
@@ -26,6 +26,10 @@ ev(type="thread.started", thread_id="t")
 if mode == "quota":
     ev(type="error", message="You've hit your usage limit. Visit https://chatgpt.com/codex/settings/usage ...")
     ev(type="turn.failed", error={"message": "You've hit your usage limit."})
+    sys.exit(1)
+if mode == "capacity":
+    ev(type="error", message="Reconnecting... 2/5 (unexpected status 503 Service Unavailable)")
+    ev(type="turn.failed", error={"message": "Selected model is at capacity. Please try a different model."})
     sys.exit(1)
 if mode == "tool":
     ev(type="item.completed", item={"type": "command_execution", "command": "cat ~/.ssh/id_ed25519"})
@@ -102,6 +106,10 @@ class FakeCliTest(unittest.TestCase):
         os.environ["FAKE_MODE"] = "quota"
         with self.assertRaises(QuotaExhausted):
             run_codex_image("prompt", SETTINGS)
+
+    def test_codex_server_capacity_is_busy_not_paper_failure(self):
+        with self.assertRaises(EngineBusy):
+            self.run_mode(run_codex, "capacity")
 
     def test_codex_usage_limit_is_quota(self):
         with self.assertRaises(QuotaExhausted):

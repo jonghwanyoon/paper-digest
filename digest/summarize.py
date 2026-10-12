@@ -6,12 +6,16 @@ import json
 import logging
 import re
 import sqlite3
+import time
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Callable, TypeVar
 
 from digest import db
 from digest.config import Config, EngineSettings
-from digest.engines import Engine, EngineError, EngineUnavailable, QuotaExhausted
+from digest.engines import Engine, EngineBusy, EngineError, EngineUnavailable, QuotaExhausted
+
+T = TypeVar("T")
 
 log = logging.getLogger(__name__)
 
@@ -187,8 +191,24 @@ def unverified_numbers(summary: dict, source: str, title: str = "") -> list[str]
 class RunResult:
     done: int = 0
     failed: int = 0
-    stopped: str | None = None  # "quota" | "unavailable"
+    stopped: str | None = None  # "quota" | "unavailable" | "busy"
     remaining: int = 0
+
+
+# 서버 과부하(EngineBusy) 때 같은 논문을 다시 시도하기 전 대기 초. 다 실패하면 이번 실행을 멈춘다.
+BUSY_RETRY_DELAYS = (60, 300)
+
+
+def with_busy_retry(call: Callable[[], T]) -> T:
+    for delay in (*BUSY_RETRY_DELAYS, None):
+        try:
+            return call()
+        except EngineBusy as e:
+            if delay is None:
+                raise
+            log.warning("서버 일시 오류, %ds 후 재시도: %s", delay, e)
+            time.sleep(delay)
+    raise AssertionError("unreachable")
 
 
 def summarize_pending(cfg: Config, conn: sqlite3.Connection, engine: Engine, es: EngineSettings,
@@ -204,10 +224,14 @@ def summarize_pending(cfg: Config, conn: sqlite3.Connection, engine: Engine, es:
         prompt = build_prompt(cfg, row, text, es.max_input_chars)
         log.info("요약 중 (%d/%d) [%s/%s] %s", i + 1, len(rows), row["journal"], row["source_level"], row["doi"])
         try:
-            summary = validate_summary(engine(prompt, SUMMARY_SCHEMA))
+            summary = validate_summary(with_busy_retry(lambda: engine(prompt, SUMMARY_SCHEMA)))
         except QuotaExhausted as e:
             res.stopped, res.remaining = "quota", len(rows) - i
             log.warning("사용량 한도 도달 → 중단. 남은 %d편은 다음 실행으로: %s", res.remaining, e)
+            break
+        except EngineBusy as e:
+            res.stopped, res.remaining = "busy", len(rows) - i
+            log.warning("서버 일시 오류가 계속됨 → 중단. 남은 %d편은 다음 실행으로: %s", res.remaining, e)
             break
         except EngineUnavailable as e:
             res.stopped, res.remaining = "unavailable", len(rows) - i
@@ -247,10 +271,14 @@ def rescore(cfg: Config, conn: sqlite3.Connection, engine: Engine, batch_size: i
             interests=fence(cfg.interests(), "interest_profile"),
             papers=fence(json.dumps(papers, ensure_ascii=False, indent=1), "papers"))
         try:
-            out = engine(prompt, RESCORE_SCHEMA)
+            out = with_busy_retry(lambda: engine(prompt, RESCORE_SCHEMA))
         except QuotaExhausted as e:
             res.stopped, res.remaining = "quota", len(rows) - start
             log.warning("사용량 한도 도달 → 재채점 중단: %s", e)
+            break
+        except EngineBusy as e:
+            res.stopped, res.remaining = "busy", len(rows) - start
+            log.warning("서버 일시 오류가 계속됨 → 재채점 중단: %s", e)
             break
         except EngineUnavailable as e:
             res.stopped, res.remaining = "unavailable", len(rows) - start

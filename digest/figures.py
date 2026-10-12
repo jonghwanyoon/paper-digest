@@ -17,10 +17,10 @@ from typing import Callable
 
 from digest import db
 from digest.config import Config, EngineSettings
-from digest.engines import EngineError, EngineUnavailable, QuotaExhausted
+from digest.engines import EngineBusy, EngineError, EngineUnavailable, QuotaExhausted
 from digest.enrich import doi_slug
 from digest.net import Client, HttpError
-from digest.summarize import RunResult, fence
+from digest.summarize import RunResult, fence, with_busy_retry
 
 log = logging.getLogger(__name__)
 
@@ -119,10 +119,15 @@ def generate_ai_figures(cfg: Config, conn: sqlite3.Connection, make_image: Calla
     for i, row in enumerate(rows):
         log.info("개요도 생성 중 (%d/%d) [관련도 %d] %s", i + 1, len(rows), int(row["relevance"]), row["doi"])
         try:
-            webp = to_webp(make_image(build_figure_prompt(row)), cfg.figures.max_width)
+            prompt = build_figure_prompt(row)
+            webp = to_webp(with_busy_retry(lambda: make_image(prompt)), cfg.figures.max_width)
         except QuotaExhausted as e:
             res.stopped, res.remaining = "quota", len(rows) - i
             log.warning("사용량 한도 도달 → 개요도 중단. 남은 %d편은 다음 실행으로: %s", res.remaining, e)
+            break
+        except EngineBusy as e:
+            res.stopped, res.remaining = "busy", len(rows) - i
+            log.warning("서버 일시 오류가 계속됨 → 개요도 중단. 남은 %d편은 다음 실행으로: %s", res.remaining, e)
             break
         except EngineUnavailable as e:
             res.stopped, res.remaining = "unavailable", len(rows) - i

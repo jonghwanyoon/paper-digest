@@ -1,8 +1,8 @@
 import json
 import unittest
 
-from digest import db
-from digest.engines import EngineError, EngineUnavailable, QuotaExhausted
+from digest import db, summarize
+from digest.engines import EngineBusy, EngineError, EngineUnavailable, QuotaExhausted
 from digest.summarize import build_prompt, summarize_pending, unverified_numbers
 from tests.helpers import TempEnv
 
@@ -31,8 +31,11 @@ class SummarizeTest(unittest.TestCase):
         self.es = self.env.cfg.engine_settings("codex")
         for i, pub in enumerate(["2026-10-10", "2026-10-09", "2026-10-08"]):
             self.env.add_paper(f"10.1/p{i}", published=pub, text="We saw a 37.5% drop in 1,000 cells.")
+        self.old_delays = summarize.BUSY_RETRY_DELAYS
+        summarize.BUSY_RETRY_DELAYS = (0, 0)
 
     def tearDown(self):
+        summarize.BUSY_RETRY_DELAYS = self.old_delays
         self.env.close()
 
     def status(self, doi):
@@ -54,6 +57,19 @@ class SummarizeTest(unittest.TestCase):
         res = summarize_pending(self.env.cfg, self.env.conn, engine, self.es)
         self.assertEqual(res.stopped, "unavailable")
         self.assertEqual(self.status("10.1/p0")["summary_attempts"], 0)
+
+    def test_server_busy_is_retried_then_succeeds_without_counting(self):
+        engine = ScriptedEngine(EngineBusy("Selected model is at capacity"), GOOD)
+        res = summarize_pending(self.env.cfg, self.env.conn, engine, self.es, dois=["10.1/p0"])
+        self.assertEqual((res.done, res.failed), (1, 0))
+        self.assertEqual(len(engine.prompts), 2)
+
+    def test_persistent_server_busy_stops_run_without_counting(self):
+        engine = ScriptedEngine(*[EngineBusy("503 Service Unavailable")] * 3)
+        res = summarize_pending(self.env.cfg, self.env.conn, engine, self.es)
+        self.assertEqual((res.stopped, res.remaining, res.failed), ("busy", 3, 0))
+        row = self.status("10.1/p0")
+        self.assertEqual((row["status"], row["summary_attempts"]), ("ready", 0))
 
     def test_paper_failures_become_failed_after_max_attempts(self):
         for attempt in range(1, self.es.max_attempts + 1):

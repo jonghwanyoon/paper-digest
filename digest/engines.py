@@ -30,6 +30,10 @@ class EngineUnavailable(Exception):
     """인증 만료·CLI 없음 등 논문과 무관한 실패. 시도 횟수를 올리지 않고 멈춘다."""
 
 
+class EngineBusy(Exception):
+    """모델 과부하·5xx 같은 서버 쪽 일시 오류. 논문 실패로 세지 않는다."""
+
+
 class EngineError(Exception):
     """이 논문 한 편의 실패(형식 오류, 시간 초과, 도구 사용 시도 등)."""
 
@@ -43,6 +47,9 @@ CLAUDE_QUOTA = re.compile(
 AUTH_FAIL = re.compile(
     r"Failed to authenticate|not logged in|log ?in required|please (?:run|use) .{0,20}login"
     r"|401 Unauthorized|refresh token|OAuth session expired|authentication", re.I)
+SERVER_BUSY = re.compile(
+    r"at capacity|overloaded|Service Unavailable|Bad Gateway|Gateway Timeout|Internal Server Error"
+    r"|unexpected status 5\d\d|API Error: 5\d\d|\b529\b|temporarily unavailable", re.I)
 
 _FORBIDDEN_CODEX_ITEMS = {"command_execution", "mcp_tool_call", "web_search", "file_change"}
 _STRIP_ENV = ("OPENAI_API_KEY", "CODEX_API_KEY", "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")
@@ -57,6 +64,8 @@ def _classify_failure(message: str, quota: re.Pattern) -> Exception:
         return QuotaExhausted(message.strip()[:500])
     if AUTH_FAIL.search(message):
         return EngineUnavailable(message.strip()[:500])
+    if SERVER_BUSY.search(message):
+        return EngineBusy(message.strip()[:500])
     return EngineError(message.strip()[:1000])
 
 
