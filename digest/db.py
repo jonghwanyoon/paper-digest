@@ -8,6 +8,10 @@ status 흐름:
   ready          근거 텍스트 있음, 요약 대기
   summarized     요약 완료
   failed         요약이 max_attempts 번 실패
+
+개요 그림(요약 완료 논문만):
+  ga_checked/ga_url   출판사 graphical abstract 확인 여부와 이미지 URL(repo 에 복사하지 않음)
+  figure_path         AI 개요도 WebP 의 repo 상대 경로(data/figures/...)
 """
 
 from __future__ import annotations
@@ -47,11 +51,27 @@ CREATE TABLE IF NOT EXISTS papers (
   summary_attempts INTEGER NOT NULL DEFAULT 0,
   last_error       TEXT,
   relevance        REAL,
-  flags_json       TEXT
+  flags_json       TEXT,
+  ga_checked       INTEGER NOT NULL DEFAULT 0,
+  ga_url           TEXT,
+  figure_path      TEXT,
+  figure_model     TEXT,
+  figure_at        TEXT,
+  figure_attempts  INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS papers_status ON papers(status);
 CREATE INDEX IF NOT EXISTS papers_digest_date ON papers(digest_date);
 """
+
+# 이전 버전 DB 에 없던 열: (이름, 정의)
+_ADDED_COLUMNS = [
+    ("ga_checked", "INTEGER NOT NULL DEFAULT 0"),
+    ("ga_url", "TEXT"),
+    ("figure_path", "TEXT"),
+    ("figure_model", "TEXT"),
+    ("figure_at", "TEXT"),
+    ("figure_attempts", "INTEGER NOT NULL DEFAULT 0"),
+]
 
 STATUSES = ("skipped", "new", "awaiting_text", "needs_pdf", "ready", "summarized", "failed")
 
@@ -66,7 +86,16 @@ def connect(path: Path) -> sqlite3.Connection:
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL")
     conn.executescript(SCHEMA)
+    _migrate(conn)
     return conn
+
+
+def _migrate(conn: sqlite3.Connection) -> None:
+    have = {r["name"] for r in conn.execute("PRAGMA table_info(papers)")}
+    for name, decl in _ADDED_COLUMNS:
+        if name not in have:
+            conn.execute(f"ALTER TABLE papers ADD COLUMN {name} {decl}")
+    conn.commit()
 
 
 def get(conn: sqlite3.Connection, doi: str) -> sqlite3.Row | None:

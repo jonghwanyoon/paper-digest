@@ -110,7 +110,7 @@ RESCORE_PROMPT = """아래 관심 분야 프로필을 기준으로 각 논문의
 """
 
 
-def _fence(text: str, tag: str) -> str:
+def fence(text: str, tag: str) -> str:
     """입력 안에 닫는 태그가 있어도 구획을 벗어나지 못하게 한다."""
     return re.sub(rf"</?\s*{tag}\s*>", lambda m: m.group(0).replace("<", "‹").replace(">", "›"),
                   text, flags=re.I)
@@ -123,13 +123,13 @@ def build_prompt(cfg: Config, row: sqlite3.Row, text: str, max_chars: int) -> st
     journal = cfg.journals.get(row["journal"])
     return PROMPT.format(
         level_desc=LEVEL_DESC.get(row["source_level"], row["source_level"]),
-        interests=_fence(cfg.interests(), "interest_profile"),
+        interests=fence(cfg.interests(), "interest_profile"),
         journal=journal.name if journal else row["journal"],
-        title=_fence(row["title"], "paper_text"),
+        title=fence(row["title"], "paper_text"),
         article_type=row["article_type"] or "-",
         level=row["source_level"],
         truncated=str(truncated).lower(),
-        text=_fence(text, "paper_text"),
+        text=fence(text, "paper_text"),
     )
 
 
@@ -196,7 +196,7 @@ def summarize_pending(cfg: Config, conn: sqlite3.Connection, engine: Engine, es:
     rows = db.by_status(conn, "ready")
     if dois:
         rows = [r for r in rows if r["doi"] in dois]
-    if limit:
+    if limit is not None:
         rows = rows[:limit]
     res = RunResult()
     for i, row in enumerate(rows):
@@ -244,8 +244,8 @@ def rescore(cfg: Config, conn: sqlite3.Connection, engine: Engine, batch_size: i
             papers.append({"id": i, "title": r["title"], "tldr": s["tldr"],
                            "key_findings": s["key_findings"], "keywords": s["keywords"]})
         prompt = RESCORE_PROMPT.format(
-            interests=_fence(cfg.interests(), "interest_profile"),
-            papers=_fence(json.dumps(papers, ensure_ascii=False, indent=1), "papers"))
+            interests=fence(cfg.interests(), "interest_profile"),
+            papers=fence(json.dumps(papers, ensure_ascii=False, indent=1), "papers"))
         try:
             out = engine(prompt, RESCORE_SCHEMA)
         except QuotaExhausted as e:

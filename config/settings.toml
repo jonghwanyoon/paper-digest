@@ -34,6 +34,17 @@ effort = "xhigh"
 model = "opus"
 effort = "high"
 
+[figures]
+# 개요 그림. graphical abstract 가 있는 저널(journals.toml 의 graphical_abstract)은 출판사 이미지를 링크로 표시한다.
+# GA 가 없으면 codex 내장 이미지 생성으로 요약 기반 개요도를 만든다(엔진이 codex 일 때만).
+# 이미지 생성은 구독 한도를 일반 호출보다 3–5배 빨리 쓰므로 관련도가 높은 논문만 대상으로 한다.
+ai_min_relevance = 7
+# 그림 프롬프트를 쓰는 추론 강도(모델은 summarizer.codex.model)
+ai_effort = "medium"
+max_attempts = 2
+# 사이트에 올릴 WebP 의 최대 가로 픽셀
+max_width = 1600
+
 [site]
 title = "Journal Daily Digest"
 timezone = "Asia/Seoul"

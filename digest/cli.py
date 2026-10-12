@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import dataclasses
 import fcntl
 import importlib.util
 import json
@@ -12,8 +13,8 @@ import textwrap
 from datetime import datetime
 from pathlib import Path
 
-from digest import config, db, export, feeds, pdfs, publish
-from digest.engines import get_engine
+from digest import config, db, export, feeds, figures, pdfs, publish
+from digest.engines import get_engine, run_codex_image
 from digest.enrich import enrich_pending
 from digest.feeds import normalize_doi
 from digest.net import Client
@@ -75,9 +76,15 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--out", type=Path)
     sub.add_parser("publish", help="data/ 커밋·push")
 
-    p = sub.add_parser("run", help="fetch → ingest-pdf → enrich → summarize → export → publish")
+    p = sub.add_parser("figures", help="graphical abstract 확인 + AI 개요도 생성(codex)")
+    p.add_argument("--limit", type=int, help="이번에 생성할 AI 개요도 최대 수")
+    _engine_args(p)
+
+    p = sub.add_parser("run", help="fetch → ingest-pdf → enrich → summarize → figures → export → publish")
     p.add_argument("--limit", type=int, help="이번 실행에서 요약할 최대 편수")
+    p.add_argument("--figure-limit", type=int, help="이번 실행에서 만들 AI 개요도 최대 수")
     p.add_argument("--no-summarize", action="store_true")
+    p.add_argument("--no-figures", action="store_true", help="AI 개요도 생성 생략(GA 확인은 함)")
     p.add_argument("--no-publish", action="store_true")
     _engine_args(p)
 
@@ -210,6 +217,24 @@ def cmd_publish(cfg, _conn, _args) -> int:
     return 0
 
 
+def _figure_step(cfg, conn, client, args, limit):
+    """GA 확인 후, 엔진이 codex 면 AI 개요도 생성. 생성하지 않았으면 None."""
+    log.info("graphical abstract: %s", figures.check_graphical_abstracts(cfg, conn, client))
+    es = cfg.engine_settings(args.engine, args.model, None)
+    if es.engine != "codex":
+        log.info("AI 개요도는 codex 엔진에서만 만든다 → 건너뜀 (엔진: %s)", es.engine)
+        return None
+    img = dataclasses.replace(es, effort=args.effort or cfg.figures.ai_effort)
+    return figures.generate_ai_figures(cfg, conn, lambda prompt: run_codex_image(prompt, img), img, limit)
+
+
+def cmd_figures(cfg, conn, args) -> int:
+    res = _figure_step(cfg, conn, _client(cfg), args, args.limit)
+    if res is not None:
+        _report(res, "AI 개요도")
+    return 2 if res is not None and res.stopped == "unavailable" else 0
+
+
 def cmd_run(cfg, conn, args) -> int:
     cfg.data_dir.mkdir(parents=True, exist_ok=True)
     lock = open(cfg.data_dir / "run.lock", "w")
@@ -226,13 +251,25 @@ def cmd_run(cfg, conn, args) -> int:
         log.info("PDF %s → %s", name, doi or "매칭 실패")
     log.info("enrich: %s", enrich_pending(cfg, conn, client) or "대상 없음")
     code = 0
+    summary_stopped = None
     if not args.no_summarize:
         es, engine = _engine(cfg, args)
         res = summarize_pending(cfg, conn, engine, es, args.limit)
         log.info("summarize: 완료 %d · 실패 %d · 중단 %s · 남음 %d",
                  res.done, res.failed, res.stopped or "-", res.remaining)
+        summary_stopped = res.stopped
         if res.stopped == "unavailable":
             code = 2
+    if args.no_summarize or args.no_figures or summary_stopped:
+        # 요약이 한도·인증 문제로 멈췄으면 이미지 생성도 같은 이유로 실패하므로 GA 확인만 한다
+        log.info("graphical abstract: %s", figures.check_graphical_abstracts(cfg, conn, client))
+    else:
+        fres = _figure_step(cfg, conn, client, args, args.figure_limit)
+        if fres is not None:
+            log.info("figures: 완료 %d · 실패 %d · 중단 %s · 남음 %d",
+                     fres.done, fres.failed, fres.stopped or "-", fres.remaining)
+            if fres.stopped == "unavailable":
+                code = 2
     changed = export.export(cfg, conn)
     log.info("export: 변경 %d개", len(changed))
     if cfg.publish_enabled and not args.no_publish:
@@ -288,7 +325,7 @@ COMMANDS = {
     "status": cmd_status, "fetch": cmd_fetch, "enrich": cmd_enrich, "summarize": cmd_summarize,
     "rescore": cmd_rescore, "resummarize": cmd_resummarize, "ingest-pdf": cmd_ingest_pdf,
     "add-pdf": cmd_add_pdf, "export": cmd_export, "build": cmd_build, "publish": cmd_publish,
-    "run": cmd_run, "list": cmd_list, "show": cmd_show,
+    "run": cmd_run, "list": cmd_list, "show": cmd_show, "figures": cmd_figures,
 }
 
 

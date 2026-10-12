@@ -4,7 +4,7 @@ Nature · Science · Cell RSS에서 새 연구 논문을 모아 근거 텍스트
 
 - 요약은 **로컬 서버**에서만 돈다(구독 인증, API 키 미사용). GitHub Actions는 `data/*.json`으로 HTML을 빌드·배포만 한다.
 - repo에는 **메타데이터 + 요약 + 원문 링크만** 올라간다. 초록·전문·PDF는 `~/.local/share/paper-digest/`에만 저장된다.
-- 표준 라이브러리 Python(3.11+)과 `pdftotext`(poppler-utils)만 쓴다.
+- 서버 쪽은 표준 라이브러리 Python(3.11+), `pdftotext`(poppler-utils), AI 개요도 WebP 변환용 Pillow를 쓴다. Actions 빌드는 표준 라이브러리만 쓴다.
 
 ```
 RSS ─fetch─▶ state.db ─enrich─▶ raw/<doi>/ (초록·전문·PDF, 로컬)
@@ -12,7 +12,9 @@ RSS ─fetch─▶ state.db ─enrich─▶ raw/<doi>/ (초록·전문·PDF, 로
          inbox/*.pdf┘                 ▼
                               summarize (codex / claude, 샌드박스)
                                       │
-                         export ─▶ data/papers/YYYY-MM.json ─push─▶ Actions ─▶ Pages
+                              figures (Cell GA 링크 / codex AI 개요도)
+                                      │
+                         export ─▶ data/papers/YYYY-MM.json, data/figures/*.webp ─push─▶ Actions ─▶ Pages
 ```
 
 ## 파일
@@ -24,7 +26,7 @@ RSS ─fetch─▶ state.db ─enrich─▶ raw/<doi>/ (초록·전문·PDF, 로
 | `config/interests.md` | 관심 분야 프로필(관련도 채점 기준) |
 | `digest/` | 수집·근거 확보·요약·내보내기 코드 (`python3 -m digest …`) |
 | `site/build.py` | `data/` → `_site/` 정적 HTML (Actions에서도 사용) |
-| `data/` | 공개 JSON (자동 생성, 커밋 대상) |
+| `data/` | 공개 JSON과 AI 개요도 WebP (자동 생성, 커밋 대상) |
 | `deploy/install-timer.sh` | 매일 실행용 systemd user timer 설치 |
 | `~/.local/share/paper-digest/` | `state.db`, `raw/`, `inbox/`, `logs/` (비공개) |
 
@@ -100,10 +102,30 @@ python3 -m digest add-pdf <DOI> paper.pdf
 - 못 찾으면 `inbox/unmatched/`로 옮겨진다. 그때는 파일명을 DOI 슬러그(`10.1016_j.cell.2026.09.017.pdf`, `/`→`_`)로 바꿔 다시 넣는다.
 - 스캔 이미지 PDF처럼 텍스트가 안 나오는 파일은 `inbox/failed/`로 옮겨진다.
 
-**7. 한 번에 실행 + 배포 + 매일 자동 실행**
+**7. 개요 그림**
 
 ```bash
-python3 -m digest run --no-publish --limit 3   # 수집→PDF→근거→요약(최대 3편)→export, push 없음
+python3 -m digest figures --limit 0   # GA 확인만 (이미지 생성 없음)
+python3 -m digest figures --limit 1   # AI 개요도 1장 생성 (codex, 약 1분)
+python3 -m unittest tests.test_figures -v
+```
+
+- **Graphical abstract**: Cell처럼 `journals.toml`에 `graphical_abstract = "elsevier"`가 있는 저널은 RSS 링크의 PII로 Elsevier 이미지 서버(`ars.els-cdn.com`)에 GA가 있는지 확인한다.
+  - 있으면 이미지 URL만 기록한다. 사이트는 출판사 서버에서 바로 불러와 표시하고, repo에는 복사하지 않는다.
+  - GA가 있는 논문은 AI 그림을 만들지 않는다. Nature·Science에는 GA가 없다.
+- **AI 개요도**: GA가 없고 관련도가 `figures.ai_min_relevance`(기본 7) 이상인 논문만 대상이다. 엔진이 codex일 때만 만든다.
+  - codex 내장 이미지 생성(`image_gen`, gpt-image-2)에 **검증된 요약**(제목·TL;DR·핵심 결과·방법)만 넘긴다. 레이블은 요약에 나온 용어만 쓰고 수치·그래프는 넣지 않게 지시한다.
+  - 결과는 `data/figures/<doi>.webp`(가로 최대 1600px, 장당 100KB 안팎)로 저장된다.
+  - 사이트에는 "AI 생성 개요도 — 논문 원본 그림이 아니며 부정확할 수 있음"이 붙는다.
+- **실행 순서와 한도**: 이미지 생성은 구독 한도를 일반 호출보다 3–5배 빨리 쓴다. 그래서 `run`은 요약을 모두 끝낸 뒤 그림을 만든다.
+  - 요약이 한도로 멈췄으면 그날은 GA 확인만 한다.
+  - 그림 생성 중 한도에 걸리면 멈추고, 남은 그림은 다음 실행으로 넘긴다. 실패는 논문당 2번까지 재시도한다.
+
+**8. 한 번에 실행 + 배포 + 매일 자동 실행**
+
+```bash
+python3 -m digest run --no-publish --limit 3   # 수집→PDF→근거→요약(최대 3편)→그림→export, push 없음
+python3 -m digest run --no-figures             # AI 개요도 없이 (GA 확인은 함)
 python3 -m digest run                          # 전체 + data/ 커밋·push
 ```
 
@@ -143,11 +165,13 @@ journalctl --user -u paper-digest.service -n 50  # 결과
 | `show <DOI>` | 로컬 정보와 요약 전체 |
 | `resummarize <DOI>…` | 다시 요약 대기로(모델을 바꾼 뒤 등) |
 | `rescore` | `interests.md` 수정 후 관련도만 재채점(요약 텍스트만 보냄, 15편씩 묶어 호출) |
+| `figures [--limit N]` | GA 확인 + AI 개요도 생성 |
 
 ## 안전 설계
 
 - **논문 텍스트는 신뢰하지 않는 입력**으로 다룬다.
   - codex: `--ignore-user-config`(사용자 MCP·플러그인 미로드), `-s read-only`, `web_search="disabled"`, shell 도구 비활성화, 빈 임시 디렉터리에서 실행한다. 그래도 명령 실행·MCP·웹 검색 이벤트가 보이면 결과를 버린다.
+  - 요약 호출은 이미지 생성도 끈다(`--disable image_generation`). 개요도 호출에서만 켜며, 입력은 원문이 아니라 검증을 거친 요약이다.
   - claude: `--tools ""`(내장 도구 전부 제거), `--strict-mcp-config`, `--setting-sources ""`로 실행한다.
   - 두 엔진 모두 `OPENAI_API_KEY`·`ANTHROPIC_API_KEY` 등을 자식 프로세스에 넘기지 않는다.
   - 프롬프트 안에서 논문 텍스트는 `<paper_text>` 구획에 넣는다. 텍스트 안의 닫는 태그는 무력화한다.
@@ -156,3 +180,5 @@ journalctl --user -u paper-digest.service -n 50  # 결과
   - 요약에 나온 수치가 근거 텍스트에 없으면 `⚠ 근거 텍스트에서 확인되지 않은 수치`로 표시한다(10 이하 정수 제외).
 - **HTML 이스케이프**: 사이트 생성 시 모든 텍스트를 `html.escape` 처리하고 JavaScript는 쓰지 않는다.
 - **공개 범위**: `data/`에는 허용 목록 필드만 내보낸다. RSS 소개문·초록·전문은 내보내지 않는다.
+  - 출판사 GA는 URL만 기록한다(이미지는 복사하지 않음).
+  - AI 개요도는 요약에서 생성한 그림이라 `data/figures/`에 올라간다.

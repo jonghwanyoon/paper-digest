@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import html
 import json
+import re
 import shutil
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
@@ -44,6 +45,27 @@ def sort_key(p: dict):
     return (0 if summarized else 1, -(p.get("relevance") or 0), p.get("journal", ""), p.get("title", ""))
 
 
+_FIGURE_PATH = re.compile(r"figures/[A-Za-z0-9._-]+\.webp")
+
+
+def render_figure(p: dict) -> str:
+    """출판사 graphical abstract(출판사 서버에서 직접 표시)가 우선, 없으면 AI 개요도."""
+    ga = p.get("graphical_abstract")
+    if ga and ga.startswith("https://"):
+        large = ga[:-4] + "_lrg.jpg" if ga.endswith("-ga1.jpg") else ga
+        return (f'<figure class="fig ga"><a href="{e(large)}" target="_blank" rel="noopener">'
+                f'<img src="{e(ga)}" alt="Graphical abstract" loading="lazy" referrerpolicy="no-referrer"></a>'
+                f'<figcaption>Graphical abstract · © {e(p.get("journal_name"))} (출판사 이미지)</figcaption></figure>')
+    fig = p.get("figure")
+    if fig and _FIGURE_PATH.fullmatch(fig):
+        model = f" · {p['figure_model']}" if p.get("figure_model") else ""
+        return (f'<figure class="fig ai"><a href="{e(fig)}" target="_blank" rel="noopener">'
+                f'<img src="{e(fig)}" alt="AI 생성 개요도" loading="lazy"></a>'
+                f'<figcaption>AI 생성 개요도{e(model)} — 요약을 바탕으로 그린 그림이며 논문 원본 그림이 아닙니다. '
+                f'세부 내용이 부정확할 수 있습니다.</figcaption></figure>')
+    return ""
+
+
 def render_paper(p: dict) -> str:
     """요약이 있는 논문 카드."""
     s = p["summary"]
@@ -66,6 +88,9 @@ def render_paper(p: dict) -> str:
         parts.append(f'<p class="title-ko">{e(s["title_ko"])}</p>')
     parts.append(f'<p class="authors">{e(p.get("authors"))}</p>')
     parts.append(f'<p class="tldr">{e(s.get("tldr"))}</p>')
+    figure = render_figure(p)
+    if figure:
+        parts.append(figure)
     if s.get("key_findings"):
         parts.append("<ul class=\"findings\">" + "".join(f"<li>{e(x)}</li>" for x in s["key_findings"]) + "</ul>")
     details = []
@@ -146,6 +171,8 @@ def build(data_dir: Path, out_dir: Path) -> list[str]:
         shutil.rmtree(out_dir)
     out_dir.mkdir(parents=True)
     shutil.copy2(HERE / "style.css", out_dir / "style.css")
+    if (data_dir / "figures").is_dir():
+        shutil.copytree(data_dir / "figures", out_dir / "figures")
 
     written = []
     for i, day in enumerate(days):

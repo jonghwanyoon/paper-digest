@@ -52,3 +52,8 @@ footer { max-width: 860px; margin: 0 auto; padding: 1rem; color: var(--muted); f
 .pending-list li a { color: var(--fg); }
 .pending-list .note { font-size: .82rem; margin-left: .3rem; }
 .pending-list .status-needs_pdf, .pending-list .status-failed { color: var(--warn); font-style: normal; }
+.fig { margin: .6rem 0 .7rem; }
+.fig img { display: block; max-width: 100%; height: auto; border: 1px solid var(--border); border-radius: 6px; background: #fff; }
+.fig.ga img { max-width: 375px; }
+.fig figcaption { font-size: .78rem; color: var(--muted); margin-top: .3rem; }
+.fig.ai figcaption { color: var(--abs); }

@@ -7,6 +7,7 @@
 #
 # html_fulltext : "nature" 이면 nature.com 논문 페이지에서 OA 전문/초록을 읽는다.
 #                 science.org, cell.com 은 Cloudflare 403 이라 지정하지 않는다.
+# graphical_abstract : "elsevier" 이면 RSS 링크의 PII 로 Elsevier 이미지 서버에서 GA 를 찾는다(Cell Press).
 
 [[journal]]
 key = "nature"
@@ -43,3 +44,4 @@ feeds = [
 ]
 include_types = ["Article", "Resource", "Short article", "Report", "Technology"]
 exclude_title = ["^Correction", "^Retraction", "^Erratum"]
+graphical_abstract = "elsevier"

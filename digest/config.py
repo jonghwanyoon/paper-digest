@@ -21,6 +21,7 @@ class Journal:
     include_types: list[str] = field(default_factory=list)
     exclude_title: list[re.Pattern] = field(default_factory=list)
     html_fulltext: str | None = None
+    graphical_abstract: str | None = None
 
     def is_research(self, doi: str, article_type: str | None, title: str) -> bool:
         if self.doi_prefixes and not any(doi.startswith(p) for p in self.doi_prefixes):
@@ -41,6 +42,14 @@ class EngineSettings:
 
 
 @dataclass(frozen=True)
+class FigureSettings:
+    ai_min_relevance: int
+    ai_effort: str
+    max_attempts: int
+    max_width: int
+
+
+@dataclass(frozen=True)
 class Config:
     repo_root: Path
     data_dir: Path
@@ -55,6 +64,7 @@ class Config:
     publish_branch: str
     journals: dict[str, Journal]
     interests_path: Path
+    figures: FigureSettings
 
     @property
     def db_path(self) -> Path:
@@ -111,10 +121,12 @@ def load(repo_root: Path = REPO_ROOT) -> Config:
             include_types=list(item.get("include_types", [])),
             exclude_title=[re.compile(p, re.I) for p in item.get("exclude_title", [])],
             html_fulltext=item.get("html_fulltext"),
+            graphical_abstract=item.get("graphical_abstract"),
         )
 
     data_dir = os.environ.get("PAPER_DIGEST_HOME") or s["paths"]["data_dir"]
     publish = s.get("publish", {})
+    fig = s.get("figures", {})
     return Config(
         repo_root=repo_root,
         data_dir=Path(data_dir).expanduser(),
@@ -129,4 +141,10 @@ def load(repo_root: Path = REPO_ROOT) -> Config:
         publish_branch=publish.get("branch", "main"),
         journals=journals,
         interests_path=cfg_dir / "interests.md",
+        figures=FigureSettings(
+            ai_min_relevance=int(fig.get("ai_min_relevance", 7)),
+            ai_effort=fig.get("ai_effort", "medium"),
+            max_attempts=int(fig.get("max_attempts", 2)),
+            max_width=int(fig.get("max_width", 1600)),
+        ),
     )

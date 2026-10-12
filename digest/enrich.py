@@ -235,7 +235,7 @@ def enrich_row(cfg: Config, conn: sqlite3.Connection, src: Sources, row: sqlite3
 def enrich_pending(cfg: Config, conn: sqlite3.Connection, client: Client, limit: int | None = None) -> dict[str, int]:
     src = Sources(cfg, client)
     rows = db.by_status(conn, "new", "awaiting_text")
-    if limit:
+    if limit is not None:
         rows = rows[:limit]
     counts: dict[str, int] = {}
     for row in rows:

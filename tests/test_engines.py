@@ -8,7 +8,8 @@ import unittest
 from pathlib import Path
 
 from digest.config import EngineSettings
-from digest.engines import (EngineError, EngineUnavailable, QuotaExhausted, run_claude, run_codex)
+from digest.engines import (EngineError, EngineUnavailable, QuotaExhausted, run_claude, run_codex,
+                            run_codex_image)
 
 SETTINGS = EngineSettings(engine="codex", model="m", effort="low", timeout_sec=30,
                           max_attempts=3, max_input_chars=1000)
@@ -33,7 +34,16 @@ if mode == "transient":
 if mode == "auth":
     print("Error: refresh token expired, please run codex login", file=sys.stderr)
     sys.exit(1)
-open(out, "w").write(json.dumps({"ok": True, "flags": [a for a in args if a.startswith("--disable")] + args[args.index("-s"):args.index("-s") + 2]}))
+disabled = [args[i + 1] for i, a in enumerate(args) if a == "--disable"]
+if mode == "image":
+    # 실제 codex 처럼: image_generation 이 꺼져 있지 않을 때만 $CODEX_HOME/generated_images/<thread>/ 에 저장
+    if "image_generation" not in disabled:
+        d = os.path.join(os.environ["CODEX_HOME"], "generated_images", "t")
+        os.makedirs(d, exist_ok=True)
+        open(os.path.join(d, "exec-1.png"), "wb").write(b"PNGDATA")
+    open(out, "w").write("DONE")
+else:
+    open(out, "w").write(json.dumps({"ok": True, "disabled": disabled, "sandbox": args[args.index("-s") + 1]}))
 ev(type="turn.completed", usage={})
 '''
 
@@ -61,9 +71,15 @@ class FakeCliTest(unittest.TestCase):
             p.chmod(p.stat().st_mode | stat.S_IEXEC)
         self.old_path = os.environ["PATH"]
         os.environ["PATH"] = f"{self.tmp.name}{os.pathsep}{self.old_path}"
+        self.old_codex_home = os.environ.get("CODEX_HOME")
+        os.environ["CODEX_HOME"] = str(Path(self.tmp.name) / "codex-home")
 
     def tearDown(self):
         os.environ["PATH"] = self.old_path
+        if self.old_codex_home is None:
+            os.environ.pop("CODEX_HOME", None)
+        else:
+            os.environ["CODEX_HOME"] = self.old_codex_home
         os.environ.pop("FAKE_MODE", None)
         os.environ.pop("ANTHROPIC_API_KEY", None)
         self.tmp.cleanup()
@@ -72,9 +88,20 @@ class FakeCliTest(unittest.TestCase):
         os.environ["FAKE_MODE"] = mode
         return fn("prompt", {"type": "object"}, SETTINGS)
 
-    def test_codex_success_uses_sandbox_flags(self):
+    def test_codex_summary_sandbox_disables_shell_and_image_gen(self):
         out = self.run_mode(run_codex, "ok")
-        self.assertEqual(out["flags"], ["--disable", "--disable", "-s", "read-only"])
+        self.assertEqual(out["sandbox"], "read-only")
+        self.assertEqual(sorted(out["disabled"]), ["image_generation", "shell_tool", "unified_exec"])
+
+    def test_codex_image_returns_generated_png_and_cleans_up(self):
+        os.environ["FAKE_MODE"] = "image"
+        self.assertEqual(run_codex_image("prompt", SETTINGS), b"PNGDATA")
+        self.assertFalse((Path(os.environ["CODEX_HOME"]) / "generated_images" / "t").exists())
+
+    def test_codex_image_quota_is_quota(self):
+        os.environ["FAKE_MODE"] = "quota"
+        with self.assertRaises(QuotaExhausted):
+            run_codex_image("prompt", SETTINGS)
 
     def test_codex_usage_limit_is_quota(self):
         with self.assertRaises(QuotaExhausted):

@@ -48,6 +48,11 @@ def public_record(cfg: Config, r: sqlite3.Row) -> dict:
         "summarized_at": r["summarized_at"],
         "relevance": None if r["relevance"] is None else int(r["relevance"]),
         "unverified_numbers": flags.get("unverified_numbers", []),
+        # 출판사 graphical abstract: 이미지 URL 만(사이트가 출판사 서버에서 직접 표시)
+        "graphical_abstract": r["ga_url"],
+        # AI 개요도: data/ 기준 상대 경로(WebP)
+        "figure": r["figure_path"],
+        "figure_model": r["figure_model"],
     }
 
 

@@ -1,4 +1,4 @@
-"""urllib 기반 HTTP GET. 호스트별 최소 간격과 429/5xx 재시도만 한다."""
+"""urllib 기반 HTTP GET/HEAD. 호스트별 최소 간격과 429/5xx 재시도만 한다."""
 
 from __future__ import annotations
 
@@ -58,3 +58,18 @@ class Client:
                     continue
                 raise HttpError(url, None, str(e)) from e
         raise AssertionError("unreachable")
+
+    def image_exists(self, url: str) -> bool:
+        """HEAD 가 200 이고 Content-Type 이 image/* 면 True, 403/404 면 False. 그 밖은 HttpError."""
+        host = urlsplit(url).hostname or ""
+        self._throttle(host)
+        req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": self.user_agent})
+        try:
+            with urllib.request.urlopen(req, timeout=self.timeout) as r:
+                return r.status == 200 and r.headers.get("Content-Type", "").startswith("image/")
+        except urllib.error.HTTPError as e:
+            if e.code in (403, 404):
+                return False
+            raise HttpError(url, e.code, e.reason) from e
+        except (urllib.error.URLError, TimeoutError, ConnectionError) as e:
+            raise HttpError(url, None, str(e)) from e
