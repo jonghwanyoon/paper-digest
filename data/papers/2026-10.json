@@ -1243,28 +1243,28 @@
   "relevance": 10,
   "source_level": "abstract",
   "status": "summarized",
-  "summarized_at": "2026-10-12T12:48:24+00:00",
+  "summarized_at": "2026-10-12T13:07:48+00:00",
   "summary": {
    "key_findings": [
-    "KRAS 억제 반응과 재발을 모델링한 생쥐에서 21h10은 화학요법 (chemotherapy)이나 면역관문 차단 (immune checkpoint blockade)과의 병용과 달리 장기적이고 지속적인 관해를 유도했다.",
-    "21h10의 효능은 제1형 보조 T 세포 (T helper 1, Th1) 성향의 CD4 T 세포에 의존했지만, CD8 T 세포 (CD8 T cells)나 종양세포 (tumor cells)의 주조직적합성복합체 I형 (major histocompatibility complex class I, MHC class I) 발현에는 의존하지 않았다.",
-    "2형 전통적 수지상세포 (type 2 conventional dendritic cells, cDC2s)에 의해 초기 자극을 받은 CD4 T 세포가 생성한 IFN-γ는 대식세포 (macrophage)에 의한 종양세포의 식세포작용 (phagocytosis)을 촉진했다.",
-    "인간 PDAC 검체를 21h10으로 생체 외 (ex vivo) 처리하면 침윤 T 세포의 IFN-γ 생성이 유도됐다."
+    "KRASi 반응과 재발을 모델링한 생쥐에서 21h10은 chemotherapy나 checkpoint blockade와의 병용과 달리 장기간 지속되는 remission을 유도했다.",
+    "21h10의 효능은 Th1-polarized CD4 T cells에 의존했으며, CD8 T cells나 tumor cell의 MHC class I 발현에는 의존하지 않았다.",
+    "cDC2s에 의해 priming된 CD4 T cells는 IFN-γ를 생성했고, 이는 macrophage에 의한 tumor cell의 phagocytosis를 촉진했다.",
+    "사람의 PDAC specimens를 21h10으로 ex vivo 처리하면 infiltrating T cells의 IFN-γ 생성이 유도됐다."
    ],
    "keywords": [
-    "Pancreatic ductal adenocarcinoma",
+    "pancreatic ductal adenocarcinoma",
     "KRAS inhibition",
     "IL-21",
     "CD4 T cells",
     "IFN-γ",
-    "Macrophage-mediated phagocytosis"
+    "macrophage-mediated phagocytosis"
    ],
    "limitations": null,
-   "methods": "생쥐에서 KRAS 억제제 (KRAS inhibitor, KRASi)에 대한 반응과 재발을 모델링했다. 인간 PDAC 검체를 생체 외에서 21h10으로 처리했다.",
+   "methods": "생쥐에서 KRASi에 대한 반응과 재발을 모델링했다. 사람의 PDAC specimens를 21h10으로 ex vivo 처리해 infiltrating T cells의 IFN-γ 생성을 조사했다.",
    "relevance": 10,
-   "relevance_reason": "췌장암의 KRAS 억제 치료 반응과 CD4 T 세포의 항종양 작용을 다뤄 암생물학 (cancer biology), 암 분자생물학 (cancer molecular biology), 종양 면역 (tumor immunology)에 대한 높은 관심에 직접 부합한다.",
-   "title_ko": "CD4 T 세포 (CD4 T cells)가 췌장암 (pancreatic cancer)에서 KRAS 억제 (KRAS inhibition)에 대한 일시적 반응을 지속적인 관해 (durable remission)로 전환한다",
-   "tldr": "생쥐의 췌관선암 (pancreatic ductal adenocarcinoma, PDAC) 모델에서 인터루킨-21 (interleukin-21, IL-21) 사이토카인 모방체 (cytokine mimic) 21h10은 CD4 T 세포를 통해 KRAS 억제에 대한 일시적 반응을 장기적이고 지속적인 관해로 전환했다. 인간 PDAC 검체에서도 침윤 T 세포 (infiltrating T cells)의 인터페론 γ (interferon γ, IFN-γ) 생성을 유도했다."
+   "relevance_reason": "PDAC에서 KRASi 반응과 재발 및 CD4 T cells의 antitumor activity를 다루므로 cancer biology, tumor immunology, therapy resistance 관심 분야에 직접 부합한다.",
+   "title_ko": "pancreatic cancer에서 KRAS inhibition에 대한 일시적 반응을 지속적인 remission으로 전환하는 CD4 T cells",
+   "tldr": "IL-21 cytokine mimic인 21h10은 생쥐에서 KRAS inhibition에 대한 일시적 반응을 장기간 지속되는 remission으로 전환했다. cDC2s에 의해 priming된 CD4 T cells가 생성한 IFN-γ는 macrophage-mediated phagocytosis를 촉진했다."
   },
   "title": "CD4 T cells convert transient responses to KRAS inhibition to durable remissions in pancreatic cancer",
   "unverified_numbers": [],
