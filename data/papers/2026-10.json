@@ -1714,28 +1714,29 @@
   "relevance": 7,
   "source_level": "abstract",
   "status": "summarized",
-  "summarized_at": "2026-10-12T08:38:13+00:00",
+  "summarized_at": "2026-10-12T13:24:59+00:00",
   "summary": {
    "key_findings": [
-    "정답이 알려진 데이터셋 (ground-truth dataset) 평가에서 단일세포 수준의 정확한 교란 할당, 유전체 규모 스크린 (genome-wide screen)으로의 확장성, 조합 교란 (combinatorial perturbation)의 구분 능력을 보였다.",
-    "리보솜 스트레스 (ribosomal stress) 조건에서 p53의 맥락 특이적 조절인자 (context-specific regulator)를 식별했다.",
-    "약물의 용량 의존적 작용 기전 (dose-dependent mechanism of action)을 분석했다.",
-    "생체 내 (in vivo) 이차 인플루엔자 감염 (secondary influenza infection)에서 사이토카인 (cytokine)에 의해 유발되는 B 세포 (B cell) 이질성 (heterogeneity)을 밝혀냈다."
+    "ground-truth datasets에서 수행한 benchmark는 single-cell 수준의 정확한 perturbation 할당과 genome-wide screens로의 확장성을 보여주었다.",
+    "RNA fingerprinting은 combinatorial perturbations를 구별할 수 있었다.",
+    "ribosomal stress에서 p53의 context-specific regulators를 확인했다.",
+    "dose-dependent drug mechanisms of action을 특성화했다.",
+    "secondary influenza infection 중 in vivo에서 cytokine-driven B cell heterogeneity를 밝혀냈다."
    ],
    "keywords": [
     "RNA fingerprinting",
-    "Single-cell perturbation dictionaries",
-    "Transcriptional responses",
-    "Combinatorial perturbations",
+    "single-cell perturbation dictionaries",
+    "transcriptional responses",
+    "combinatorial perturbations",
     "p53",
     "B cell heterogeneity"
    ],
    "limitations": null,
-   "methods": "단일세포 데이터에서 교란의 표현인 지문을 학습한 뒤, 질의 세포 (query cell)를 하나 이상의 후보 교란에 확률적으로 할당했다. 정답이 알려진 데이터셋으로 할당 정확도, 유전체 규모 스크린으로의 확장성, 조합 교란 구분 능력을 평가했다.",
+   "methods": "single-cell data에서 perturbation representations인 fingerprint를 학습한 뒤, query cells를 하나 이상의 candidate perturbations에 확률적으로 할당했다. ground-truth datasets를 이용한 benchmark를 수행하고 다양한 biological settings에 적용했다.",
    "relevance": 7,
-   "relevance_reason": "단일세포 데이터 해석과 교란 분석 방법론에 직접 관련되며, p53 조절인자와 B 세포 이질성도 다룬다.",
-   "title_ko": "RNA 지문 분석 (RNA fingerprinting)을 이용한 세포 교란 (cellular perturbation)에 대한 전사 반응 (transcriptional response) 매핑",
-   "tldr": "RNA 지문 분석은 단일세포 (single-cell) 데이터에서 교란의 지문을 학습해 새로운 실험의 전사 반응을 참조 교란 사전 (reference perturbation dictionary)에 연결하는 통계 프레임워크 (statistical framework)다. 세포 상태를 그 바탕이 되는 교란과 연결하며, 다양한 생물학적 환경에서 활용 가능성을 보였다."
+   "relevance_reason": "single-cell data 해석 방법론과 p53 regulators, cytokine-driven B cell heterogeneity를 다뤄 single-cell omics, molecular biology, immunology 관심 분야와 직접 관련된다.",
+   "title_ko": "RNA fingerprinting을 이용한 transcriptional response와 cellular perturbation의 연결",
+   "tldr": "RNA fingerprinting은 single-cell data에서 학습한 fingerprint를 이용해 새로운 실험의 transcriptional response를 reference perturbation dictionaries에 연결하는 statistical framework다. single-cell 수준의 정확한 perturbation 할당, genome-wide screens로의 확장성, combinatorial perturbations 구별 능력을 보여주었다."
   },
   "title": "Mapping transcriptional responses to cellular perturbations with RNA fingerprinting",
   "unverified_numbers": [],
@@ -1760,29 +1761,29 @@
   "relevance": 10,
   "source_level": "abstract",
   "status": "summarized",
-  "summarized_at": "2026-10-12T12:46:42+00:00",
+  "summarized_at": "2026-10-12T13:37:43+00:00",
   "summary": {
    "key_findings": [
-    "SLC52A3를 통한 VB2 흡수는 T 세포의 항종양 면역 (antitumor immunity)에 필수적이며, 종양은 SLC52A3보다 SLC52A2를 우선적으로 이용해 VB2를 확보하고 T 세포와의 경쟁에서 우위를 점했다.",
-    "VB2 결핍은 미토콘드리아 호흡 (mitochondrial respiration)과 글루타티온 재생 (glutathione regeneration)을 저해하여 미토콘드리아 자가포식 (mitophagy), 불안정 철 (labile iron) 축적, 지질 과산화 (lipid peroxidation)를 거쳐 T 세포 페롭토시스를 유발했다.",
-    "면역 기능이 정상인 숙주 (immunocompetent host)에서 종양의 SLC52A2 제거 (ablation)는 종양 자체의 성장에 뚜렷한 영향을 주지 않으면서 T 세포 기능을 향상시켰다.",
-    "임상적으로 종양 내 높은 SLC52A2 수준은 T 세포 기능 장애 (T cell dysfunction) 및 불량한 생존 결과와 상관관계를 보였으며, 식이 VB2 섭취는 암 위험 감소와 연관되었다.",
-    "VB2 보충 또는 SLC52A3 과발현은 CAR-T 세포의 항종양 효능을 높였다."
+    "SLC52A3를 통한 VB2 uptake는 T cell의 antitumor immunity에 필수적이었다.",
+    "VB2 결핍은 mitochondrial respiration과 glutathione regeneration을 저해하고 mitophagy, labile iron 축적, lipid peroxidation을 유발해 T cell ferroptosis로 이어졌다.",
+    "Tumor는 SLC52A2를 우선적으로 사용해 VB2 확보에서 T cell을 앞섰으며, tumor SLC52A2 ablation은 immunocompetent host에서 intrinsic tumor growth에 뚜렷한 영향을 주지 않으면서 T cell function을 강화했다.",
+    "임상적으로 높은 tumoral SLC52A2는 T cell dysfunction 및 poor survival과 상관관계를 보였으며, dietary VB2 intake는 cancer risk 감소와 연관되었다.",
+    "VB2 supplementation 또는 SLC52A3 overexpression은 CAR-T cell의 antitumor efficacy를 강화했다."
    ],
    "keywords": [
-    "Vitamin B2",
+    "vitamin B2",
     "SLC52A2",
     "SLC52A3",
     "T cell ferroptosis",
-    "Metabolic competition",
+    "metabolic competition",
     "CAR-T cell"
    ],
    "limitations": null,
-   "methods": "CareSLCs 플랫폼을 구축하고, 면역 기능이 정상인 숙주에서 종양의 SLC52A2를 제거하여 T 세포 기능과 종양 자체의 성장을 평가했다. VB2 보충 또는 SLC52A3 과발현이 CAR-T 세포의 항종양 효능에 미치는 영향을 평가했다.",
+   "methods": "CareSLCs platform을 구축하고, immunocompetent host에서 tumor SLC52A2 ablation의 영향을 평가했다. VB2 supplementation과 SLC52A3 overexpression이 CAR-T cell의 antitumor efficacy에 미치는 영향을 평가했다.",
    "relevance": 10,
-   "relevance_reason": "종양의 면역 회피 (immune evasion)와 T 세포 기능 회복을 통한 암 면역치료 (cancer immunotherapy)를 직접 다루어 관심 분야인 암생물학 (cancer biology)과 종양 면역 (tumor immunology)에 밀접하게 관련된다.",
-   "title_ko": "암세포의 비타민 B2 (vitamin B2, VB2) 경쟁이 T 세포 (T cell) 페롭토시스 (ferroptosis)의 대사 체크포인트 (metabolic checkpoint)를 형성한다",
-   "tldr": "종양은 SLC52A2를 이용해 VB2 확보 경쟁에서 T 세포보다 우위를 점하며, VB2 결핍은 T 세포 페롭토시스를 유발한다. VB2 보충 또는 SLC52A3 과발현 (overexpression)은 CAR-T 세포 (CAR-T cell)의 항종양 효능 (antitumor efficacy)을 강화했다."
+   "relevance_reason": "Tumor의 metabolic competition에 의한 immune evasion과 T cell ferroptosis, cancer immunotherapy 효능 개선을 직접 다뤄 cancer biology와 tumor immunology 관심 분야에 밀접하다.",
+   "title_ko": "vitamin B2를 둘러싼 cancer의 경쟁이 T cell ferroptosis의 metabolic checkpoint를 형성한다",
+   "tldr": "Tumor의 SLC52A2를 통한 vitamin B2 (VB2) 경쟁은 T cell ferroptosis를 유발하는 metabolic checkpoint를 형성한다. VB2 supplementation 또는 SLC52A3 overexpression은 CAR-T cell의 antitumor efficacy를 강화했다."
   },
   "title": "Cancer competition for vitamin B2 creates metabolic checkpoint for T cell ferroptosis",
   "unverified_numbers": [],
@@ -1907,29 +1908,29 @@
   "relevance": 7,
   "source_level": "abstract",
   "status": "summarized",
-  "summarized_at": "2026-10-12T08:39:29+00:00",
+  "summarized_at": "2026-10-12T13:26:35+00:00",
   "summary": {
    "key_findings": [
-    "세균에 의한 애기장대의 철 결핍 완화는 다양한 환경 pH에서 작동하며, 서로 다른 토양 특성을 가진 토양에서 유래한 뿌리 미생물군 (root microbiota) 분리 균주의 여러 분류군에 널리 나타났다.",
-    "이 과정은 숙주가 제어하고 pH에 맞춰 조절하는 서로 다른 쿠마린 화학형 (coumarin chemotype)의 뿌리 분비 (root exudation)에 의해 조절된다.",
-    "분비된 대사산물은 뿌리 연관 세균과 상호작용하여 중성 부근 pH에서는 시데로포어 매개 킬레이션으로, 산성 pH에서는 산화환원 감지로 조절되는 환원 기반 경로로 철을 가용화한다.",
-    "해당 세균 유전자는 뿌리 미생물군에 널리 존재하며, 육상식물 (land plants)이 출현하기 전에 진화했을 가능성이 있다.",
-    "연구 결과는 비화본과 식물 (non-graminaceous plant species)의 철 영양 결핍에 따른 산화환원 활성 대사산물 (redox-active metabolites) 분비가 고대 미생물 과정의 전용 (co-option)을 통해 토양 철을 가용화하는 널리 퍼진 적응일 수 있음을 시사한다."
+    "Arabidopsis의 bacterium-mediated Fe deficiency 완화는 다양한 environmental pH에서 작동하며, 서로 다른 edaphic profiles의 soil에서 유래한 root microbiota isolates의 다양한 taxa에 걸쳐 널리 나타났다.",
+    "이 과정은 host-controlled 및 pH-adapted root exudation을 통한 서로 다른 coumarin chemotypes의 방출에 의해 조절됐다.",
+    "Coumarin exometabolites는 root-associated bacteria와 상호작용하여 circumneutral pH에서는 bacterial siderophore-mediated chelation으로, acidic pH에서는 redox-sensing-controlled reduction-based pathways로 Fe를 mobilize했다.",
+    "해당 bacterial genes는 root microbiota에 널리 존재하며, land plants가 출현하기 전에 진화했을 가능성이 제시됐다.",
+    "Non-graminaceous plant species에서 Fe malnutrition으로 유도되는 redox-active metabolites의 exudation은 ancient microbial processes의 co-option을 통해 soil의 Fe mobilization을 돕는 광범위한 adaptation일 가능성이 제시됐다."
    ],
    "keywords": [
     "Arabidopsis",
     "coumarins",
     "iron acquisition",
     "root microbiota",
-    "siderophores",
-    "redox sensing"
+    "siderophore-mediated chelation",
+    "redox-sensing"
    ],
    "limitations": null,
    "methods": null,
    "relevance": 7,
-   "relevance_reason": "식물과 세균의 상호작용 및 철 획득 경로가 미생물학 (microbiology)·분자생물학 (molecular biology) 관심과 관련되며, 고대 미생물 과정의 전용과 유전자의 진화적 기원은 진화생물학 (evolutionary biology) 관심과도 연결된다.",
-   "title_ko": "애기장대 (Arabidopsis)는 pH에 적응한 철 (iron, Fe) 획득을 위해 서로 다른 쿠마린 (coumarin)과 세균 경로를 활용한다",
-   "tldr": "애기장대는 환경 pH에 맞춰 서로 다른 쿠마린을 뿌리에서 분비하여 뿌리 연관 세균 (root-associated bacteria)을 통한 철 결핍 완화를 조절한다. 철 가용화에는 중성 부근 pH (circumneutral pH)에서 시데로포어 (siderophore) 매개 킬레이션 (chelation)이, 산성 pH에서 산화환원 감지 (redox sensing)로 조절되는 환원 기반 경로가 관여한다."
+   "relevance_reason": "Root microbiota의 Fe mobilization과 host-controlled coumarin exudation을 다루고 bacterial genes의 evolution 및 ancient microbial processes의 co-option을 제시해 microbiology와 evolutionary biology에 관련된다.",
+   "title_ko": "Arabidopsis는 pH에 맞춘 iron acquisition에 서로 다른 coumarins와 bacterial pathways를 활용한다",
+   "tldr": "Arabidopsis의 bacterium-mediated Fe deficiency 완화는 host가 pH에 맞춰 조절하는 서로 다른 coumarin chemotypes의 root exudation에 의해 조절된다. Fe mobilization에는 circumneutral pH에서 bacterial siderophore-mediated chelation이, acidic pH에서 redox-sensing-controlled reduction-based pathways가 관여한다."
   },
   "title": "Arabidopsis uses distinct coumarins and bacterial pathways for pH-adaptive iron acquisition",
   "unverified_numbers": [],
@@ -1979,28 +1980,29 @@
   "relevance": 6,
   "source_level": "abstract",
   "status": "summarized",
-  "summarized_at": "2026-10-12T09:34:00+00:00",
+  "summarized_at": "2026-10-12T13:27:51+00:00",
   "summary": {
    "key_findings": [
-    "Gimap6 소실 생쥐에서는 고지혈증 없이 염증성 혈관병증이 발생하고 죽상경화증이 가속화되었으며, 혈관 이상은 진행성 심장 허혈 (cardiac ischemia), 심근경색 (myocardial infarction), 심부전과 조기 사망으로 이어졌다.",
-    "GIMAP6 소실은 초기 내피 장벽 (endothelial barrier) 기능 상실과 미토콘드리아 활성산소종 (reactive oxygen species, ROS)-PPARγ-CD36 지질 유입 연쇄반응 (lipid-influx cascade)을 촉발했다.",
-    "이 연쇄반응은 포말세포 형성의 역치를 낮추고 IL-6/MCP-1/TNF 매개 염증을 유도했다.",
-    "아프리카계 혈통에서 빈도가 높은 V65I 대립유전자 (allele)를 포함한 사람의 기능 저하형 GIMAP6 변이는 단핵구 (monocyte)의 산화환원 균형 (redox balance) 변화, CD36 매개 지질 흡수 증가 및 조기 ASCVD와 연관되었다."
+    "mice에서 Gimap6 소실은 hyperlipidemia 없이 inflammatory vasculopathy와 가속화된 atherosclerosis를 유발했다.",
+    "이러한 vascular abnormalities는 progressive cardiac ischemia, myocardial infarction, heart failure를 유발하고 조기 사망으로 이어졌다.",
+    "GIMAP6 소실은 초기 endothelial barrier failure와 mitochondrial reactive oxygen species (ROS)-PPARγ-CD36 lipid-influx cascade를 유발했다.",
+    "이 cascade는 foam-cell formation의 threshold를 낮추고 IL-6/MCP-1/TNF-mediated inflammation을 유도했다.",
+    "African-ancestry-enriched V65I allele을 포함한 human hypomorphic GIMAP6 variants는 monocyte redox balance 변화, CD36-mediated lipid uptake 증가 및 early ASCVD와 연관되었다."
    ],
    "keywords": [
     "GIMAP6",
     "atherosclerosis",
-    "endothelial barrier",
-    "foam cell",
-    "reactive oxygen species",
-    "CD36"
+    "endothelial barrier failure",
+    "foam-cell formation",
+    "CD36",
+    "inflammation"
    ],
    "limitations": null,
    "methods": null,
    "relevance": 6,
-   "relevance_reason": "면역조절 유전자, 내피 기능, 포말세포 형성 및 염증 기전을 다뤄 면역학 (immunology)·세포생물학 (cell biology)·유전학 (genetics) 관심 분야에 해당한다.",
-   "title_ko": "면역조절 유전자 (immunoregulatory gene) GIMAP6는 치명적인 죽상경화성 혈관병증 (atherosclerotic vasculopathy)과 허혈성 심부전 (ischemic heart failure)을 억제한다",
-   "tldr": "생쥐에서 Gimap6 소실은 고지혈증 (hyperlipidemia) 없이도 죽상경화증 (atherosclerosis)과 심부전을 유발해 조기 사망으로 이어졌으며, 사람의 기능 저하형 변이 (hypomorphic variant)는 조기 죽상경화성 심혈관질환 (atherosclerotic cardiovascular disease, ASCVD)과 연관되었다. GIMAP6는 내피 기능 장애 (endothelial dysfunction), 대식세포 (macrophage)의 포말세포 (foam cell) 형성 및 염증 (inflammation)을 억제하는 혈관 보호 인자로 제시됐다."
+   "relevance_reason": "GIMAP6가 vascular integrity, macrophage foam cell generation 및 inflammation을 조절하는 기전을 다뤄 molecular biology와 immunology 관심 분야에 해당한다.",
+   "title_ko": "Immunoregulatory gene GIMAP6는 치명적인 atherosclerotic vasculopathy와 ischemic heart failure를 억제한다",
+   "tldr": "mice에서 Gimap6 소실은 hyperlipidemia 없이 atherosclerosis를 가속하고 heart failure와 조기 사망으로 이어졌다. Human hypomorphic GIMAP6 variants도 early ASCVD와 연관되어, GIMAP6의 vascular integrity 보호 역할을 뒷받침했다."
   },
   "title": "Immunoregulatory gene GIMAP6 suppresses lethal atherosclerotic vasculopathy and ischemic heart failure",
   "unverified_numbers": [],
@@ -2100,26 +2102,26 @@
   "relevance": 10,
   "source_level": "abstract",
   "status": "summarized",
-  "summarized_at": "2026-10-12T12:52:52+00:00",
+  "summarized_at": "2026-10-12T13:32:15+00:00",
   "summary": {
    "key_findings": [
-    "새로운 다세포 종의 발견과 실험 모델 (experimental models)의 개발은 세포의 집단 형성, 다세포 수준의 적응 (adaptation), 새로운 세포 유형과 발생 양상에 관한 이해를 진전시켰다.",
-    "조상 단세포 형질을 새로운 용도로 활용하면 극복하기 어려워 보이는 다세포성 진화의 장벽도 쉽게 극복되는 경우가 많다.",
-    "다세포 집단에서 자발적으로 발생하는 창발적 특성 역시 다세포성으로의 진화적 전환에서 장벽을 극복하는 경로가 된다."
+    "새로운 multicellular species의 발견과 experimental models의 개발은 multicellularity로의 전환을 이끄는 microevolutionary processes를 이해하는 데 중요한 통찰을 제공했다.",
+    "극복하기 어려워 보이는 진화적 장벽은 ancestral unicellular traits의 재활용을 통해 쉽게 극복되는 경우가 많다.",
+    "multicellular collectives에서 자발적으로 발생하는 emergent properties도 진화적 장벽을 극복하는 경로가 된다."
    ],
    "keywords": [
-    "Multicellularity",
-    "Microevolution",
-    "Evolutionary transitions",
-    "Ancestral unicellular traits",
-    "Emergent properties"
+    "multicellularity",
+    "microevolutionary processes",
+    "ancestral unicellular traits",
+    "emergent properties",
+    "experimental models"
    ],
    "limitations": null,
    "methods": null,
    "relevance": 10,
-   "relevance_reason": "단세포에서 다세포 생물로의 진화적 전환과 그 미시진화 기작을 직접 다루므로 높은 관심 분야인 진화생물학 (evolutionary biology)과 밀접하게 관련된다.",
-   "title_ko": "다세포성 (multicellularity)으로의 진화적 전환에서 핵심 난제 극복",
-   "tldr": "이 종설 (review)은 단세포가 기능적으로 통합된 다세포 생물로 진화하는 미시진화 과정 (microevolutionary processes)을 검토한다. 진화적 장벽은 조상 단세포 형질 (ancestral unicellular traits)의 새로운 활용이나 다세포 집단에서 자발적으로 나타나는 창발적 특성 (emergent properties)을 통해 극복될 수 있다."
+   "relevance_reason": "multicellularity의 기원과 복잡화를 이끄는 microevolutionary processes를 다뤄 높은 관심 분야인 evolutionary biology와 직접 관련된다.",
+   "title_ko": "multicellularity로 진화하는 과정의 핵심 난제 극복",
+   "tldr": "이 논문은 single cells가 기능적으로 통합된 multicellular organisms로 진화하는 과정을 다룬 주요 연구 성과를 검토한다. 진화적 난제는 ancestral unicellular traits의 재활용이나 multicellular collectives에서 자발적으로 발생하는 emergent properties를 통해 쉽게 극복되는 경우가 많다."
   },
   "title": "Overcoming key challenges in the evolutionary transition to multicellularity",
   "unverified_numbers": [],
@@ -2144,29 +2146,29 @@
   "relevance": 10,
   "source_level": "fulltext",
   "status": "summarized",
-  "summarized_at": "2026-10-12T09:51:43+00:00",
+  "summarized_at": "2026-10-12T13:34:05+00:00",
   "summary": {
    "key_findings": [
-    "고등급 전암성 기도 병변 (high-grade premalignant airway lesion)에서 BATF (basic leucine zipper ATF-like transcription factor)를 발현하는 eTreg가 선택적으로 증가했으며, 이 세포의 전사 특징은 침윤성 폐암의 면역억제성 Treg 및 PD-1 차단 (PD-1 blockade) 치료 무반응과 연관됐다.",
-    "폐 병변의 BATF^+ Treg와 혈중 eTreg는 T 세포 수용체 클론형 (T cell receptor clonotype)을 공유했으며, 종단 분석에서 혈중 eTreg 클론형 빈도는 기준 시점부터 폐암 진단 시점까지 증가했다.",
-    "종양 BATF^+ Treg 전사 특징과 혈중 CD39^+ eTreg 빈도를 결합한 회로 점수가 높은 초기 NSCLC 환자는 무병 생존 (disease-free survival, DFS)이 짧았으며, 공변량 보정 후에도 연관성이 유지됐다 (위험비 (hazard ratio, HR) = 2.99, 95% 신뢰구간 (confidence interval, CI) = 1.06–8.42, P = 0.038).",
-    "발암물질 NTCU (N-nitroso-tris-chloroethylurea)로 유도한 생쥐 폐암에서도 배액 림프절 (draining lymph node, dLN)·혈액·폐를 잇는 eTreg 축이 침윤 전에 나타났고, 림프절 이탈 차단은 폐 Treg 수를 감소시켰다.",
-    "PI3Kδ 억제제 PI-3065는 생쥐의 종양 발생률을 83%에서 42%로 낮추고 종양 크기를 줄였으며, Treg가 풍부한 기관지 주변 미성숙 3차 림프구조 (immature tertiary lymphoid structure, iTLS)를 억제하고 국소의 제1형 일반 수지상세포 (conventional type 1 dendritic cell, cDC1)를 증가시켰지만 침윤 전 병변 부담은 변하지 않았다."
+    "환자의 high-grade premalignant airway lesion에서 BATF^+ Treg cell이 선택적으로 증가했으며, 해당 gene signature는 immunotherapy 반응 실패와 관련된 eTreg cell signature와 유사했다.",
+    "병변의 BATF^+ Treg cell은 circulating eTreg cell과 clonotype을 공유했고, circulating eTreg cell은 high-grade lesion 환자와 CT screening으로 발견된 early-stage NSCLC 환자에서 증가하며 longitudinal 분석에서도 진단 시점까지 증가했다.",
+    "높은 tumour BATF^+ Treg cell signature와 circulating CD39^+ eTreg cell frequency를 결합한 circuit score는 clinical covariate 보정 후에도 짧은 DFS와 관련되었다(HR = 2.99, 95% CI = 1.06–8.42, P = 0.038).",
+    "NTCU mouse model에서도 dLN·혈액·폐를 연결하는 eTreg cell network가 나타났으며, FTY720으로 lymph node egress를 차단하자 lung Treg cell이 감소해 이 network의 부분적인 lymph node 의존성을 뒷받침했다.",
+    "PI-3065는 tumour incidence를 83%에서 42%로 줄이고(n = 12 per group, P = 0.045) tumour 크기를 감소시켰으며, circulating·pulmonary Treg cell과 Treg cell-rich iTLS를 줄이고 남은 iTLS 내 cDC1과 CCR7^+ migratory dendritic cell을 증가시켰다."
    ],
    "keywords": [
-    "non-small cell lung cancer",
-    "effector regulatory T cells",
-    "BATF",
-    "PI3Kδ",
-    "immune interception",
-    "tertiary lymphoid structures"
+    "NSCLC",
+    "BATF^+ Treg cells",
+    "circulating eTreg cells",
+    "PI3Kδ inhibition",
+    "immature tertiary lymphoid structures",
+    "immune interception"
    ],
-   "limitations": "한 조직 구획만 표적으로 삼아도 조기 차단이 가능한지, 여러 조직의 동시 조절이 필요한지는 불분명하며, PI-3065 실험으로 Treg 외 세포의 기여를 배제할 수 없다. 혈중 eTreg의 임상 활용에는 대규모 전향적 검증 (prospective validation)이 필요하고, 만성 염증성 동반질환·손상·감염에 따른 Treg 변화가 특이도 (specificity)를 제한할 수 있다.",
-   "methods": "자가형광 기관지내시경 (autofluorescence bronchoscopy, AFB) 및 컴퓨터단층촬영 (computed tomography, CT) 감시 코호트의 기도 병변·종양·혈액을 단일세포 RNA 시퀀싱 (single-cell RNA sequencing, scRNA-seq), T 세포 수용체 시퀀싱 (T cell receptor sequencing, TCR-seq), 벌크 RNA 시퀀싱 (bulk RNA sequencing) 및 유세포분석 (flow cytometry)으로 분석했다. 클론형 공유·유사시간 (pseudotime)·세포 간 상호작용 분석과 회귀·생존 분석으로 조직 간 연계 및 임상 결과를 평가했다. NTCU 유도 생쥐 모델에서 PI3Kδ 억제, 림프절 이탈 차단 및 Treg 고갈 처치를 수행하고, 조직학 (histology)·다중 면역형광 (multiplex immunofluorescence)·Xenium 공간 전사체 분석 (spatial transcriptomics)으로 종양과 면역환경을 평가했다.",
+   "limitations": "PI-3065 실험만으로 tumorigenesis에서 non-Treg cell의 기여를 배제할 수 없으며, 단일 tissue compartment 표적화만으로 interception이 충분한지 또는 여러 tissue에 걸친 조절이 필요한지는 불명확하다. Circulating eTreg cell의 임상적 활용에는 대규모 prospective validation이 필요하고, chronic inflammatory comorbidities, injury 및 infection이 Treg cell homeostasis를 변화시켜 specificity를 제한할 수 있다.",
+   "methods": "AFB 및 CT surveillance cohort의 병변·혈액·tumour 시료를 scRNA-seq, scTCR-seq, bulk RNA-seq, longitudinal bulk TCR-seq 및 flow cytometry로 분석했다. 외부 데이터 통합, differential abundance, pseudobulk differential expression, clonotype sharing, pseudotime 및 DFS 분석을 수행했다. NTCU mouse model에서 PI-3065와 BYL719, FTY720 및 anti-CD25·anti-CTLA-4 처치를 평가하고 histology, immunofluorescence, flow cytometry 및 Xenium spatial transcriptomics로 분석했다.",
    "relevance": 10,
-   "relevance_reason": "폐암의 침윤 전 진행과 Treg 매개 면역억제, PI3Kδ 표적 조기 차단을 직접 다루므로 암생물학 (cancer biology) 및 종양 면역 (tumour immunology) 관심 분야와 매우 밀접하다.",
-   "title_ko": "폐암 조기 차단을 위한 침윤 전 조절 T 세포 (regulatory T cell, Treg) 축",
-   "tldr": "비소세포폐암 (non-small cell lung cancer, NSCLC)의 침윤 전 진행에서 혈액과 폐 병변을 연결하는 효과기 조절 T 세포 (effector regulatory T cell, eTreg) 축이 증폭됐고, 혈중 eTreg 증가는 폐암 발생·진행과 연관됐다. 생쥐에서 포스포이노시타이드 3-키나아제 δ (phosphoinositide 3-kinase-δ, PI3Kδ) 억제는 이 면역억제 축을 약화시키고 폐종양 발생률과 크기를 줄였다."
+   "relevance_reason": "NSCLC의 preinvasive progression에서 Treg cell-mediated immune regulation을 규명하고 PI3Kδ inhibition을 통한 cancer interception을 평가하여 cancer biology와 tumour immunology에 직접 관련된다.",
+   "title_ko": "lung cancer interception을 위한 preinvasive regulatory T cell 축",
+   "tldr": "NSCLC의 preinvasive progression에서 병변의 BATF^+ Treg cell과 circulating eTreg cell을 연결하는 cross-tissue network가 나타났으며, circulating eTreg cell은 tumorigenesis 진행에 따라 증가했다. NTCU mouse model에서 PI3Kδ inhibition은 Treg cell-rich iTLS 형성과 lung tumour 발생·크기를 줄여 immune interception 가능성을 제시했다."
   },
   "title": "A preinvasive regulatory T cell axis for lung cancer interception",
   "unverified_numbers": [],
@@ -2741,29 +2743,29 @@
   "relevance": 10,
   "source_level": "fulltext",
   "status": "summarized",
-  "summarized_at": "2026-10-12T12:55:22+00:00",
+  "summarized_at": "2026-10-12T13:36:22+00:00",
   "summary": {
    "key_findings": [
-    "전립선암 세포주 (cell line), 환자 유래 이종이식 (patient-derived xenograft, PDX) 모델 및 환자 조직에서 tRNA1^Arg(UCU) 감소는 AR 활성 저하와 신경내분비 (neuroendocrine, NE) 특징 증가와 연관되었다.",
-    "tRNA1^Arg(UCU)를 25–50% 감소시키자 AR 경로 활성이 낮아지고 AR 경로 억제제 (AR pathway inhibitor, ARPI) 저항성이 증가했으며, 재발현은 계통 가소성 세포의 AR 의존성과 약물 감수성을 회복시켰다.",
-    "TARDBP와 ZSCAN29는 tRNA1^Arg(UCU) 유전자 좌위 (gene locus)에 결합하여 RNA 중합효소 III (RNA polymerase III)의 점유를 유지하고 해당 tRNA의 전사를 선택적으로 촉진했다.",
-    "SMARCC2 리포터 (reporter)의 AGA 코돈을 CGC로 치환하면 계통 상태에 따른 단백질 양 변화가 사라졌고, SMARCC2 억제는 tRNA 재발현으로 회복된 AR 활성과 엔잘루타마이드 (enzalutamide) 감수성을 다시 낮췄다.",
-    "환자에서 낮은 tRNA1^Arg(UCU) 발현은 더 이른 골전이 (bone metastasis)와 짧은 전체 생존 (overall survival)에 연관되었으며, 생쥐 전이 실험에서도 tRNA1^Arg(UCU) 억제가 전이를 촉진했다."
+    "tRNA1^Arg(UCU)는 AR-dependent AD에서 LP state로 전환될 때 선택적으로 감소했으며, knockdown은 AR activity를 낮추고 NE-associated gene expression과 ARPI resistance를 높였다.",
+    "tRNA1^Arg(UCU) re-expression은 LP cells의 AR pathway activity와 enzalutamide·apalutamide·darolutamide sensitivity를 회복했고, LNCaP-abl cells에서도 AR pathway activity와 enzalutamide sensitivity를 높였다.",
+    "TARDBP와 ZSCAN29는 H3K4me3가 풍부한 TRR-TCT1-1 locus에 직접 결합해 RNA polymerase III occupancy와 tRNA1^Arg(UCU) transcription을 선택적으로 유지했다.",
+    "tRNA1^Arg(UCU)는 AGA codon을 통해 SWI/SNF subunit SMARCC2 translation을 조절했으며, SMARCC2 knockdown은 tRNA1^Arg(UCU) re-expression으로 회복된 AR activity와 enzalutamide sensitivity를 역전시켰다.",
+    "patient samples에서 낮은 tRNA1^Arg(UCU) abundance는 더 이른 bone metastasis 및 짧은 overall survival과 연관됐고, C4-2B intracardiac injection assay에서 tRNA1^Arg(UCU) depletion은 metastasis를 fourfold 증가시켰다."
    ],
    "keywords": [
-    "prostate cancer",
     "tRNA1^Arg(UCU)",
+    "prostate cancer",
     "lineage plasticity",
     "therapy resistance",
     "SMARCC2",
     "SWI/SNF"
    ],
-   "limitations": "임상 연관성은 후향적 분석 (retrospective analysis)에 근거하므로 AR 표적 치료 저항성 바이오마커 (biomarker)로서의 예측력은 전향적 연구 (prospective study)로 검증해야 한다. TARDBP·ZSCAN29의 상위 조절 신호와 tRNA1^Arg(UCU)의 신경 유전자 발현망 조절 기전은 아직 규명되지 않았으며, 생체 내 실험의 공식 표본 수 계산과 연구의 무작위 배정은 수행하지 않았다.",
-   "methods": "다중 소형 RNA 시퀀싱 (multiplex small RNA sequencing, MSR-seq), RNA 시퀀싱 (RNA sequencing, RNA-seq), 노던 블롯 (northern blot) 및 정량 PCR (quantitative PCR, qPCR)로 발현을 분석하고, 짧은 헤어핀 RNA (short hairpin RNA, shRNA) 억제와 tRNA 재발현으로 계통 상태 및 약물 반응을 평가했다. CUT&RUN과 염색질 면역침강–정량 PCR (chromatin immunoprecipitation–quantitative PCR, ChIP–qPCR)로 유전자 좌위의 조절을 조사하고, AGA 번역 리포터, SMARCC2 코돈 치환 및 폴리솜 RNA 시퀀싱 (polysome RNA-seq)으로 번역 기전을 검증했다. Hi-Myc·TRAMP 생쥐 모델과 전립선 오가노이드 (organoid), 심장 내 주입 (intracardiac injection) 전이 실험을 사용했으며, 환자 급속 부검 (rapid autopsy) 조직의 BaseScope RNA 제자리 혼성화 (RNA in situ hybridization) 결과와 임상 경과의 상관관계를 분석했다.",
+   "limitations": "patient outcome과의 연관성은 retrospective analyses에서 도출됐으며, tRNA isodecoder의 AR-targeted therapy resistance biomarker로서 predictive utility를 평가하려면 prospective studies가 필요하다. TARDBP와 ZSCAN29 expression을 조절하는 upstream signals와 tRNA1^Arg(UCU)가 neuronal expression networks를 조절하는 방식은 아직 규명되지 않았다.",
+   "methods": "LNCaP·C4-2B lineage plasticity models에서 MSR-seq, RNA-seq, qPCR 및 northern blotting을 수행하고, tRNA1^Arg(UCU) knockdown·re-expression과 mouse-derived organoids 및 Hi-Myc·TRAMP models로 AR dependency와 ARPI response를 평가했다. ENCODE ChIP–seq 분석, CUT&RUN 및 ChIP–qPCR로 TARDBP·ZSCAN29와 RNA polymerase III occupancy를 조사하고, AGA codon reporter, SMARCC2 codon-switching reporter 및 polysome RNA-seq로 translation을 분석했다. UW rapid autopsy cohort의 BaseScope in situ hybridization 결과를 lineage signatures 및 clinical outcomes와 비교하고, luciferase-expressing C4-2B cells의 intracardiac injection과 bioluminescence imaging으로 metastasis를 평가했다.",
    "relevance": 10,
-   "relevance_reason": "전립선암의 계통 가소성, 치료 저항성 및 전이를 tRNA 발현·번역 조절과 염색질 재구성 기전으로 연결하므로 암생물학 (cancer biology)과 암 분자생물학 (cancer molecular biology)의 핵심 관심사에 직접 해당한다.",
-   "title_ko": "전이 RNA (transfer RNA, tRNA) 발현량이 전립선암의 계통 의존성 (lineage dependency)과 치료 저항성 (therapy resistance)을 조절한다",
-   "tldr": "전립선암에서 tRNA1^Arg(UCU) 감소는 계통 가소성 (lineage plasticity)과 안드로겐 수용체 (androgen receptor, AR) 표적 치료 저항성을 촉진했고, 재발현은 AR 의존성과 치료 감수성을 회복시켰다. 이 효과는 AGA 코돈 (codon)에 의존하는 SWI/SNF 염색질 재구성 복합체 (chromatin remodelling complex) 구성요소 SMARCC2의 번역 (translation) 조절을 통해 나타났다."
+   "relevance_reason": "prostate cancer의 lineage plasticity, AR-targeted therapy resistance 및 metastasis를 tRNA dosage와 SWI/SNF translation 조절에 연결하므로 cancer biology와 cancer molecular biology 관심 분야에 직접 부합한다.",
+   "title_ko": "tRNA dosage가 prostate cancer의 lineage dependency와 resistance를 조절한다",
+   "tldr": "prostate cancer models에서 tRNA1^Arg(UCU) 감소는 AR activity를 낮추고 ARPI resistance를 유도했으며, re-expression은 AR dependency와 ARPI sensitivity를 회복했다. tRNA1^Arg(UCU)는 AGA codon을 통한 SMARCC2 translation을 조절해 lineage dependency를 유지했다."
   },
   "title": "tRNA dosage regulates lineage dependency and resistance in prostate cancer",
   "unverified_numbers": [],
@@ -2888,27 +2890,28 @@
   "relevance": 0,
   "source_level": "abstract",
   "status": "summarized",
-  "summarized_at": "2026-10-12T12:43:55+00:00",
+  "summarized_at": "2026-10-12T13:29:04+00:00",
   "summary": {
    "key_findings": [
-    "모은하는 적색편이 2.148 ± 0.0013에 위치하며, 저질량이고 덩어리 구조를 가진 별 형성 은하다.",
-    "이 FRB는 우주 별 형성 (cosmic star formation)이 정점에 이른 시기에 발생했으며, 우주 역사의 약 80%에 걸친 이온화 가스 (ionized gas)를 탐사한다.",
-    "강하게 산란된 폭발 방출은 현재 관측 조사에서 검출되지 않는 FRB 집단이 있음을 시사한다."
+    "FRB 20240304B의 host galaxy는 redshift 2.148 ± 0.0013의 low-mass, clumpy, star-forming galaxy로 확인됐다.",
+    "이 FRB는 Big Bang 이후 3 billion years에 해당하는 cosmic star formation의 정점 시기에 발생했다.",
+    "이 FRB는 cosmic history의 약 80%에 걸친 ionized gas를 탐사한다.",
+    "highly scattered burst emission은 현재 survey에서 탐지되지 않는 FRB population이 있음을 시사한다."
    ],
    "keywords": [
-    "Fast radio bursts",
-    "Redshift",
-    "Host galaxy",
-    "Cosmic star formation",
-    "Ionized gas",
-    "Scattering"
+    "fast radio bursts",
+    "FRB 20240304B",
+    "host galaxy",
+    "redshift",
+    "cosmic star formation",
+    "ionized gas"
    ],
    "limitations": null,
-   "methods": "FRB 20240304B의 전파 관측 (radio observations)과 근적외선 후속 관측 (near-infrared follow-up)을 수행해 모은하를 식별했다.",
+   "methods": "FRB 20240304B에 대한 radio observations와 host galaxy를 식별하기 위한 near-infrared follow-up을 수행했다.",
    "relevance": 0,
-   "relevance_reason": "고속 전파 폭발과 우주 가스를 다룬 천문학 연구로, 관심 프로필의 생명과학 분야와 직접적인 관련이 없다.",
-   "title_ko": "빅뱅 후 3 billion years, 적색편이 (redshift) 2에서의 고속 전파 폭발 (fast radio burst, FRB)",
-   "tldr": "FRB 20240304B의 모은하 (host galaxy)는 빅뱅 후 3 billion years에 해당하는 시기의 저질량 별 형성 은하 (star-forming galaxy)로 확인됐다. 폭발 방출의 강한 산란 (scattering)은 현재 관측 조사에서 검출되지 않는 FRB 집단의 존재를 시사한다."
+   "relevance_reason": "FRB와 cosmic history를 다루는 astronomy 연구로, 관심 분야인 cancer biology, evolutionary biology 및 일반 biology와 직접적인 관련이 없다.",
+   "title_ko": "Big Bang 이후 3 billion years 시점에 발생한 redshift 2의 fast radio burst",
+   "tldr": "FRB 20240304B의 host galaxy는 redshift 2.148 ± 0.0013에 있으며, 이는 Big Bang 이후 3 billion years에 해당한다. highly scattered burst emission은 현재 survey에서 탐지되지 않는 FRB population의 존재를 시사한다."
   },
   "title": "A fast radio burst at redshift 2, three billion years after the Big Bang",
   "unverified_numbers": [],
@@ -2958,29 +2961,29 @@
   "relevance": 7,
   "source_level": "abstract",
   "status": "summarized",
-  "summarized_at": "2026-10-12T12:45:26+00:00",
+  "summarized_at": "2026-10-12T13:31:06+00:00",
   "summary": {
    "key_findings": [
-    "894마리의 개에서 얻은 1640개의 메틸롬 (methylome)으로 개발한 후성유전 시계 (epigenetic clock)는 사망을 예측했다.",
-    "개의 후성유전적 노화는 생애 초기에 가장 빨랐다.",
-    "인간의 노화 관련 유전자에 대응하는 개의 직교상동 유전자 (ortholog)에서 프로모터 메틸화 (promoter methylation)의 연령 효과가 인간과 일치했으며, 이는 면역 경로 (immune pathways)의 보존된 재편을 보여주었다.",
-    "수명이 더 짧은, 체격이 큰 개와 수컷에서 분자적 노화가 가속되었다.",
-    "성별 관련 메틸화 변화는 X 염색체 (X chromosome)에 집중되었고, 체격 관련 메틸화 변화는 전이인자에서 특히 두드러졌다."
+    "개발된 epigenetic clock은 mortality를 예측했으며, epigenetic aging은 생애 초기에 가장 빨랐다.",
+    "개는 human age-associated genes의 orthologs에서 사람과 일치하는 promoter methylation의 age effects를 보였으며, 이는 immune pathways의 보존된 remodeling을 보여준다.",
+    "수명이 짧은 큰 체격의 개와 수컷에서 molecular aging이 가속화되었다.",
+    "성별에 따른 methylation 변화는 X chromosome에 집중되었다.",
+    "체격과 관련된 methylation은 transposable elements에서 특히 두드러졌으며, TEs는 체격 관련 수명을 매개할 가능성이 제시되었다."
    ],
    "keywords": [
-    "Epigenetic aging",
-    "Epigenetic clock",
-    "Methylation",
-    "Transposable elements",
-    "Lifespan",
-    "Domestic dogs"
+    "epigenetic aging",
+    "epigenetic clock",
+    "methylation",
+    "transposable elements",
+    "lifespan",
+    "dogs"
    ],
    "limitations": null,
-   "methods": "894마리의 개에서 얻은 1640개의 메틸롬을 이용해 후성유전 시계를 개발했다. 인간의 노화 관련 유전자에 대응하는 직교상동 유전자의 프로모터 메틸화에서 연령 효과를 살피고, 성별·체격과 관련된 메틸화 양상을 분석했다.",
+   "methods": "894 dogs의 1640 methylomes를 이용해 epigenetic clock을 개발했다.",
    "relevance": 7,
-   "relevance_reason": "후성유전적 변화와 분자적 노화, 종간 보존된 노화 관련 유전자 및 면역 경로를 다뤄 분자생물학·유전체학 관심과 직접 관련된다.",
-   "title_ko": "개의 후성유전적 노화 (epigenetic aging)와 전이인자 조절 이상 (transposon dysregulation)은 체격에 따른 수명 단축을 반영한다",
-   "tldr": "체격이 큰 개와 수컷은 수명이 더 짧고 분자적 노화 (molecular aging)가 가속되었으며, 후성유전적 노화는 생애 초기에 가장 빨랐다. 체격 관련 메틸화 (methylation) 변화는 전이인자 (transposable elements, TEs)에서 두드러졌으며, 전이인자가 체격에 따른 수명을 매개할 가능성이 제시되었다."
+   "relevance_reason": "epigenetic aging, methylation 및 transposable elements와 수명의 관계를 다루어 molecular biology 및 genomics 관심 분야와 관련된다.",
+   "title_ko": "개의 체격에 따른 수명 단축을 반영하는 epigenetic aging과 transposon dysregulation",
+   "tldr": "수명이 짧은 큰 체격의 개와 수컷에서 molecular aging이 가속화되었으며, 체격과 성별에 따른 methylation 변화는 서로 다른 양상을 보였다. TEs는 체격에 따른 수명 차이를 매개할 가능성이 제시되었다."
   },
   "title": "Epigenetic aging and transposon dysregulation reflect size-related lifespan compression in dogs",
   "unverified_numbers": [],
