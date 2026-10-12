@@ -1,0 +1,43 @@
+# data/*.json(메타데이터+요약)만으로 정적 사이트를 빌드해 GitHub Pages 에 배포한다.
+# LLM 호출은 하지 않는다(요약은 로컬 서버에서 끝난 상태로 push 된다).
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+    paths: ["data/**", "site/**", ".github/workflows/pages.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - run: python site/build.py --data data --out _site
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

@@ -1,0 +1,45 @@
+# 저널과 연구 논문 판별 규칙.
+#
+# 판별 순서(모두 통과해야 연구 논문):
+#   doi_prefixes   : 지정 시 DOI 가 이 중 하나로 시작해야 함
+#   include_types  : 지정 시 항목 유형(dc:type 또는 prism:section)이 이 중 하나여야 함
+#   exclude_title  : 제목이 이 정규식 중 하나와 맞으면 제외(대소문자 무시)
+#
+# html_fulltext : "nature" 이면 nature.com 논문 페이지에서 OA 전문/초록을 읽는다.
+#                 science.org, cell.com 은 Cloudflare 403 이라 지정하지 않는다.
+
+[[journal]]
+key = "nature"
+name = "Nature"
+feeds = ["https://www.nature.com/nature.rss"]
+doi_prefixes = ["10.1038/s41586-"]
+exclude_title = [
+  "^Author Correction",
+  "^Publisher Correction",
+  "^Correction",
+  "^Editorial Expression of Concern",
+  "^Retraction",
+  "^Addendum",
+  "^Matters Arising",
+]
+html_fulltext = "nature"
+
+[[journal]]
+key = "science"
+name = "Science"
+feeds = [
+  "https://www.science.org/action/showFeed?type=etoc&feed=rss&jc=science",
+  "https://www.science.org/action/showFeed?type=axatoc&feed=rss&jc=science",
+]
+include_types = ["Research Article", "Report", "Research Resource"]
+exclude_title = ["^Erratum", "^Retraction", "^Editorial Expression of Concern"]
+
+[[journal]]
+key = "cell"
+name = "Cell"
+feeds = [
+  "https://www.cell.com/cell/current.rss",
+  "https://www.cell.com/cell/inpress.rss",
+]
+include_types = ["Article", "Resource", "Short article", "Report", "Technology"]
+exclude_title = ["^Correction", "^Retraction", "^Erratum"]

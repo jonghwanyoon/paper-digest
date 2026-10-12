@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+_site/
+.omp/
+# 원문(PDF·초록·전문)은 repo 밖 ~/.local/share/paper-digest 에만 둔다. 실수로 복사해도 올라가지 않게:
+*.pdf
+raw/
+inbox/
+state.db

@@ -1,0 +1,45 @@
+# paper-digest 설정. 경로의 ~ 는 홈 디렉터리로 펼쳐진다.
+
+[paths]
+# 비공개 로컬 저장소: state.db, raw/(초록·전문·PDF), inbox/, logs/
+# 환경변수 PAPER_DIGEST_HOME 이 있으면 그 값이 우선한다.
+data_dir = "~/.local/share/paper-digest"
+
+[contact]
+# Crossref polite pool, NCBI E-utilities, OpenAlex 요청에 붙는 연락처
+email = "jonghwanyoon.bio@gmail.com"
+
+[openalex]
+# 비워 두면 키 없이 요청한다(DOI 단건 조회는 키 없이 일 1000회).
+api_key = ""
+
+[enrich]
+# 근거 텍스트(초록/전문)를 못 구하면 이 일수 동안 매일 재시도한 뒤 "PDF 필요"로 표시
+abstract_wait_days = 7
+
+[summarizer]
+# engine: "codex" | "claude"  (명령행 --engine/--model/--effort 로 덮어쓸 수 있음)
+engine = "codex"
+timeout_sec = 1800
+# 실패(한도 제외) 몇 번이면 failed 로 둘지
+max_attempts = 3
+# LLM 에 넘길 근거 텍스트 최대 글자 수(넘으면 뒤를 잘라내고 잘렸다고 알린다)
+max_input_chars = 150000
+
+[summarizer.codex]
+model = "gpt-6.1-sol"
+effort = "xhigh"
+
+[summarizer.claude]
+model = "opus"
+effort = "high"
+
+[site]
+title = "Journal Daily Digest"
+timezone = "Asia/Seoul"
+
+[publish]
+# run 이 끝나면 data/ 변경분을 커밋하고 push 한다. remote 가 없으면 push 는 건너뛴다.
+enabled = true
+remote = "origin"
+branch = "main"
