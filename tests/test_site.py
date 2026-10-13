@@ -20,7 +20,7 @@ ABSTRACT = "SECRET-ABSTRACT-SENTENCE that must stay local."
 class ExportAndBuildTest(unittest.TestCase):
     def setUp(self):
         self.env = TempEnv()
-        summary = {"title_ko": EVIL, "tldr": EVIL, "key_findings": [EVIL], "methods": EVIL,
+        summary = {"title_ko": EVIL, "tldr": EVIL, "summary": EVIL, "novelty": EVIL,
                    "limitations": None, "keywords": [EVIL], "relevance": 9, "relevance_reason": EVIL}
         self.env.add_paper("10.1/evil", status="summarized", text=ABSTRACT, teaser=ABSTRACT,
                            title=EVIL, summary_json=json.dumps(summary), summary_level="abstract",

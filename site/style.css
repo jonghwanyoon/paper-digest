@@ -33,7 +33,7 @@ footer { max-width: 860px; margin: 0 auto; padding: 1rem; color: var(--muted); f
 .src-pdf { border-color: var(--pdf); color: var(--pdf); }
 .oa { color: var(--full); }
 .tldr { font-weight: 600; margin: .4rem 0; }
-.findings { margin: .3rem 0 .5rem; padding-left: 1.2rem; }
+.summary { margin: .3rem 0 .5rem; }
 .details { margin: .3rem 0; font-size: .93rem; }
 .details dt { font-weight: 700; color: var(--muted); font-size: .82rem; margin-top: .4rem; }
 .details dd { margin: 0; }

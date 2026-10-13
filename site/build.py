@@ -91,13 +91,10 @@ def render_paper(p: dict) -> str:
     figure = render_figure(p)
     if figure:
         parts.append(figure)
-    if s.get("key_findings"):
-        parts.append("<ul class=\"findings\">" + "".join(f"<li>{e(x)}</li>" for x in s["key_findings"]) + "</ul>")
-    details = []
-    if s.get("methods"):
-        details.append(f"<dt>방법</dt><dd>{e(s['methods'])}</dd>")
-    if s.get("limitations"):
-        details.append(f"<dt>한계</dt><dd>{e(s['limitations'])}</dd>")
+    if s.get("summary"):
+        parts.append(f'<p class="summary">{e(s["summary"])}</p>')
+    details = [f"<dt>기존 연구와의 차별점</dt><dd>{e(s.get('novelty') or '근거 텍스트에 기존 연구와의 비교가 없습니다.')}</dd>",
+               f"<dt>한계</dt><dd>{e(s.get('limitations') or '근거 텍스트에 한계가 언급되지 않았습니다.')}</dd>"]
     if s.get("relevance_reason"):
         details.append(f"<dt>관련도 근거</dt><dd>{e(s['relevance_reason'])}</dd>")
     if details:

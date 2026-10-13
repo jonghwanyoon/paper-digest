@@ -6,7 +6,7 @@ from digest.engines import EngineBusy, EngineError, EngineUnavailable, QuotaExha
 from digest.summarize import build_prompt, summarize_pending, unverified_numbers
 from tests.helpers import TempEnv
 
-GOOD = {"title_ko": "제목", "tldr": "핵심 37.5% 감소", "key_findings": ["결과 1"], "methods": None,
+GOOD = {"title_ko": "제목", "tldr": "핵심 37.5% 감소", "summary": "쉬운 설명.", "novelty": None,
         "limitations": None, "keywords": ["k"], "relevance": 7, "relevance_reason": "이유"}
 
 
@@ -86,7 +86,7 @@ class SummarizeTest(unittest.TestCase):
         self.assertEqual((res.done, res.failed), (0, 1))
 
     def test_success_records_source_level_and_flags(self):
-        out = {**GOOD, "key_findings": ["1,000개 세포에서 42% 증가"]}
+        out = {**GOOD, "summary": "1,000개 세포에서 42% 증가했다."}
         summarize_pending(self.env.cfg, self.env.conn, ScriptedEngine(out), self.es, dois=["10.1/p0"])
         row = self.status("10.1/p0")
         self.assertEqual(row["summary_level"], "abstract")
@@ -100,8 +100,8 @@ class SummarizeTest(unittest.TestCase):
 
 class GroundingTest(unittest.TestCase):
     def test_unverified_numbers(self):
-        s = {"tldr": "생존율 37.5% 향상, 3개 코호트", "key_findings": ["n = 1000", "P = 0.003"],
-             "methods": "12주 관찰", "limitations": None}
+        s = {"tldr": "생존율 37.5% 향상, 3개 코호트", "summary": "n = 1000, P = 0.003",
+             "novelty": "12주 관찰은 처음이다", "limitations": None}
         src = "Survival improved by 37.5% across three cohorts (n = 1,000; P < 0.01)."
         self.assertEqual(unverified_numbers(s, src), ["0.003", "12"])
 

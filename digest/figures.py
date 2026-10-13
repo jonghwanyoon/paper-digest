@@ -77,8 +77,7 @@ def check_graphical_abstracts(cfg: Config, conn: sqlite3.Connection, client: Cli
 
 def build_figure_prompt(row: sqlite3.Row) -> str:
     s = json.loads(row["summary_json"])
-    payload = {"title": row["title"], "tldr": s["tldr"], "key_findings": s["key_findings"],
-               "methods": s.get("methods")}
+    payload = {"title": row["title"], "tldr": s["tldr"], "summary": s["summary"]}
     return FIGURE_PROMPT.format(summary=fence(json.dumps(payload, ensure_ascii=False, indent=1), "summary"))
 
 

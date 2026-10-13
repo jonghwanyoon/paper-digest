@@ -313,9 +313,8 @@ def cmd_show(cfg, conn, args) -> int:
         s = json.loads(row["summary_json"])
         print("\n--- 요약")
         print(f"[{s['title_ko']}]\n{textwrap.fill(s['tldr'], 100)}")
-        for f in s["key_findings"]:
-            print(textwrap.fill(f, 100, initial_indent="  - ", subsequent_indent="    "))
-        for k in ("methods", "limitations", "relevance_reason"):
+        print(textwrap.fill(s["summary"], 100, initial_indent="  ", subsequent_indent="  "))
+        for k in ("novelty", "limitations", "relevance_reason"):
             if s.get(k):
                 print(textwrap.fill(s[k], 100, initial_indent=f"{k}: ", subsequent_indent="    "))
         print("keywords:", ", ".join(s["keywords"]))
