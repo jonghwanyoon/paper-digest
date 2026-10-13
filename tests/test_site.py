@@ -33,21 +33,29 @@ class ExportAndBuildTest(unittest.TestCase):
     def tearDown(self):
         self.env.close()
 
-    def test_public_json_has_no_source_text_and_no_skipped(self):
+    def test_public_json_has_no_source_text_no_skipped_no_model(self):
         blob = "".join(p.read_text() for p in self.data.rglob("*.json"))
         self.assertNotIn("SECRET-ABSTRACT", blob)
+        self.assertNotIn("gpt-", blob)
         records = json.loads((self.data / "papers" / "2026-10.json").read_text())
         self.assertEqual(sorted(r["doi"] for r in records), ["10.1/evil", "10.1/waiting"])
+        self.assertFalse({"engine", "model", "figure_model"} & set(records[0]))
 
-    def test_model_output_is_escaped(self):
+    def test_model_output_is_escaped_on_every_page(self):
         with tempfile.TemporaryDirectory() as out:
             site_build.build(self.data, Path(out))
-            page = (Path(out) / "index.html").read_text()
-        self.assertNotIn("<script>", page)
-        self.assertNotIn("<img", page)
-        self.assertIn("&lt;script&gt;alert(1)&lt;/script&gt;", page)
-        self.assertIn("근거: 초록", page)
-        self.assertIn("PDF 필요", page)
+            pages = {p.name: p.read_text() for p in Path(out).glob("*.html")}
+        self.assertIn("paper-10.1_evil.html", pages)
+        for name, page in pages.items():
+            self.assertNotIn("<script>", page, name)
+            self.assertNotIn("<img src=x", page, name)
+        self.assertIn("&lt;script&gt;alert(1)&lt;/script&gt;", pages["index.html"])
+        self.assertIn('href="paper-10.1_evil.html"', pages["index.html"])
+        article = pages["paper-10.1_evil.html"]
+        self.assertIn("근거: 초록", article)
+        self.assertIn("기존 연구와의 차별점", article)
+        self.assertIn("근거 텍스트에 한계가 언급되지 않았습니다.", article)
+        self.assertIn("PDF 필요", pages["2026-10-12.html"])
 
     def test_relevance_order(self):
         records = json.loads((self.data / "papers" / "2026-10.json").read_text())

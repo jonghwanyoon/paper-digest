@@ -43,8 +43,6 @@ def public_record(cfg: Config, r: sqlite3.Row) -> dict:
         "source_level": r["summary_level"] if summary else r["source_level"],
         "pdf_pending": r["source_level"] == "pdf" and r["status"] == "ready",
         "summary": summary,
-        "engine": r["summary_engine"],
-        "model": r["summary_model"],
         "summarized_at": r["summarized_at"],
         "relevance": None if r["relevance"] is None else int(r["relevance"]),
         "unverified_numbers": flags.get("unverified_numbers", []),
@@ -52,7 +50,6 @@ def public_record(cfg: Config, r: sqlite3.Row) -> dict:
         "graphical_abstract": r["ga_url"],
         # AI 개요도: data/ 기준 상대 경로(WebP)
         "figure": r["figure_path"],
-        "figure_model": r["figure_model"],
     }
 
 

@@ -114,13 +114,18 @@ class FiguresTest(unittest.TestCase):
         export.export(self.cfg, self.env.conn)
         with tempfile.TemporaryDirectory() as out:
             site_build.build(self.cfg.public_data_dir, Path(out))
-            page = (Path(out) / "index.html").read_text()
+            index = (Path(out) / "index.html").read_text()
+            ga_page = (Path(out) / "paper-10.1_ga.html").read_text()
+            ai_page = (Path(out) / "paper-10.1_ai.html").read_text()
+            bad_page = (Path(out) / "paper-10.1_bad.html").read_text()
             self.assertTrue((Path(out) / "figures" / "10.1_ai.webp").exists())
-        self.assertIn('src="https://ars.els-cdn.com/content/image/1-s2.0-S0092867426011190-ga1.jpg"', page)
-        self.assertIn("1-s2.0-S0092867426011190-ga1_lrg.jpg", page)
-        self.assertIn('src="figures/10.1_ai.webp"', page)
-        self.assertIn("AI 생성 개요도", page)
-        self.assertNotIn("etc/passwd", page)
+        ga = 'src="https://ars.els-cdn.com/content/image/1-s2.0-S0092867426011190-ga1.jpg"'
+        self.assertIn(ga, index)  # 카드 썸네일
+        self.assertIn(ga, ga_page)
+        self.assertIn("1-s2.0-S0092867426011190-ga1_lrg.jpg", ga_page)
+        self.assertIn('src="figures/10.1_ai.webp"', index)
+        self.assertIn("AI 생성 개요도", ai_page)
+        self.assertNotIn("etc/passwd", index + bad_page)
 
 
 if __name__ == "__main__":
